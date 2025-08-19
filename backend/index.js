@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import authRouter from './routes/auth.route.js';
+import { chatRouter } from './routes/chat.route.js';
 dotenv.config();
 
 import {connectDB} from './utils/dbConnection.js';
@@ -21,6 +22,7 @@ app.use(cors({
 }));
 //Routes-->
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/chats', chatRouter);
 
 //Testing API
 app.get('/', (req, res) => {
