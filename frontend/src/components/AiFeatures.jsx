@@ -1,0 +1,46 @@
+import React from "react";
+import AiFeatureCard from "./AiFeatureCard";
+
+function AiFeatures() {
+  return (
+    <div className="bg-black h-full w-screen text-white flex flex-col items-center  py-26 my-4">
+      <div className="flex flex-col items-center gap-4 ">
+        <h1 className="text-5xl font-bold text-gray-400 ">
+          Comprehensive AI Features
+        </h1>
+        <p className="text-2xl text-gray-500">
+          Everything you need for modern development in one intelligent platform
+        </p>
+
+        <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  py-8 my-8 px-4 rounded-lg">
+          <AiFeatureCard
+            icon={"l"}
+            heading={"Smart Code Review"}
+            para={
+              "Get instant, intelligent feedback on your code with security analysis, performance optimization, and best practice recommendations."
+            }
+            keypoints={[1, 2, 3]}
+          />
+          <AiFeatureCard
+            icon={"l"}
+            heading={"Smart Chat History"}
+            para={
+              "Never lose context with intelligent conversation tracking, search, and organization across all your AI interactions."
+            }
+            keypoints={[1, 2, 3]}
+          />
+          <AiFeatureCard
+            icon={"l"}
+            heading={"AI Quiz Generator"}
+            para={
+              "Create personalized coding challenges and assessments that adapt to your skill level and learning objectives."
+            }
+            keypoints={[1, 2, 3]}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AiFeatures;

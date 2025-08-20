@@ -3,7 +3,7 @@ import homeBg from '../assets/home-bg.png'
 
 function Hero() {
   return (
-    <div className="h-screen w-full bg-black flex">
+    <div className="h-screen w-screen bg-black flex">
       {/* Left Side - Text Content */}
       <div className="w-1/2 h-full flex flex-col justify-center px-16 bg-black text-white">
         <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
@@ -31,6 +31,7 @@ function Hero() {
         />
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/32 to-transparent"></div>
+      <hr/>
       </div>
     </div>
   )

@@ -2,14 +2,8 @@ import { NavLink } from 'react-router-dom';
 
 function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-blue-900 via-gray-900 to-purple-900 text-white py-16 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 25px 25px, white 2%, transparent 0%)',
-          backgroundSize: '50px 50px'
-        }}></div>
-      </div>
+    <footer className=" w-screen bg-gradient-to-br from-black to-gray-900 text-white py-16 relative overflow-hidden">
+      
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Top Section with Logo and Description */}
@@ -25,7 +19,7 @@ function Footer() {
         {/* Main Grid Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           {/* Quick Links */}
-          <div className="bg-white/5 p-6 rounded-xl backdrop-blur-sm">
+          <div className="bg-white/6 p-6 rounded-md backdrop-blur-sm h-80">
             <h4 className="text-xl font-bold text-blue-400 mb-6">
               Quick Links
             </h4>
