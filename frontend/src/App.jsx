@@ -17,10 +17,10 @@ const router = createBrowserRouter([
       { path: '/pricing', element: <Pricing /> },
       { path: '/tools', element: <Tools /> },
       { path: '/profile', element: <Profile /> },
-      { path: '/sign-up', element: <SignUp /> },
-      { path: '/sign-in', element: <SignIn /> },
     ],
   },
+  { path: '/sign-up', element: <SignUp /> },
+  { path: '/sign-in', element: <SignIn /> },
 ]);
 
 function App() {
