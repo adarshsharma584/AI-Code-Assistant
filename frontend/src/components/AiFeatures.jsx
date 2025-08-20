@@ -8,18 +8,22 @@ function AiFeatures() {
         <h1 className="text-5xl font-bold text-gray-400 ">
           Comprehensive AI Features
         </h1>
-        <p className="text-2xl text-gray-500">
+        <p className="text-2xl text-gray-500 ">
           Everything you need for modern development in one intelligent platform
         </p>
 
-        <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  py-8 my-8 px-4 rounded-lg">
+        <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  py-8 mt-12 mb-6 px-4 rounded-lg">
           <AiFeatureCard
             icon={"l"}
             heading={"Smart Code Review"}
             para={
               "Get instant, intelligent feedback on your code with security analysis, performance optimization, and best practice recommendations."
             }
-            keypoints={[1, 2, 3]}
+            keypoints={[
+              "Advanced security scanning",
+              "Performance optimization tips",
+              "Best practice enforcement",
+            ]}
           />
           <AiFeatureCard
             icon={"l"}
@@ -27,7 +31,11 @@ function AiFeatures() {
             para={
               "Never lose context with intelligent conversation tracking, search, and organization across all your AI interactions."
             }
-            keypoints={[1, 2, 3]}
+            keypoints={[
+              "Conversation threading",
+              "Intelligent search & filters",
+              "Export & sharing options",
+            ]}
           />
           <AiFeatureCard
             icon={"l"}
@@ -35,7 +43,11 @@ function AiFeatures() {
             para={
               "Create personalized coding challenges and assessments that adapt to your skill level and learning objectives."
             }
-            keypoints={[1, 2, 3]}
+            keypoints={[
+              "Adaptive difficulty levels",
+              "Multiple question formats",
+              "Instant detailed feedback",
+            ]}
           />
         </div>
       </div>

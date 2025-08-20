@@ -6,7 +6,7 @@ import Pricing from './pages/Pricing';
 import Tools from './pages/Tools';
 import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
-
+import SignIn from "./pages/SignIn"
 const router = createBrowserRouter([
   {
     path: '/',
@@ -17,7 +17,8 @@ const router = createBrowserRouter([
       { path: '/pricing', element: <Pricing /> },
       { path: '/tools', element: <Tools /> },
       { path: '/profile', element: <Profile /> },
-      { path: '/signup', element: <SignUp /> },
+      { path: '/sign-up', element: <SignUp /> },
+      { path: '/sign-in', element: <SignIn /> },
     ],
   },
 ]);
