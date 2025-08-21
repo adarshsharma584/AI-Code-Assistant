@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import handyBot from "../assets/handy-resize.png"
+import { BsGithub } from "react-icons/bs";
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../context/contexts-Files/authContext';
+
 function SignIn() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  // const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { signin } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      await signin(formData.email, formData.password);
+      navigate('/'); // Redirect to home page after successful login
+      console.log('User signed in:', formData);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
-    <div className='min-h-screen w-full bg-black flex  flex-col items-center justify-center  py-8 '>
+   <> 
+   <div className='min-h-screen w-full bg-black flex  flex-col items-center justify-center  py-8 '>
           {/* Header */}
           <div className="text-start mb-6 flex justify-between items-end  w-[38%] relative">
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-800 to-white text-transparent bg-clip-text ml-4">
@@ -27,7 +40,7 @@ function SignIn() {
           </div>
 
           {/* Form */}
-      <div className='w-[38%] h-[65vh] bg-gray-900/50 rounded backdrop-blur-sm border border-white/10 flex flex-col justify-center'>
+      <div className='w-[38%] h-[70vh] bg-gray-900/50 rounded backdrop-blur-sm border border-white/10 flex flex-col justify-center'>
         <div className='max-w-md mx-auto w-full px-4'>
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="space-y-3">
@@ -112,13 +125,20 @@ function SignIn() {
               <span className="text-gray-300 text-sm">Google</span>
             </button>
             <button className="flex items-center justify-center px-3 py-2 border border-gray-700 rounded-lg hover:bg-gray-800/50 transition-colors duration-300">
-              <img src="https://www.svgrepo.com/show/448234/github.svg" alt="GitHub" className="h-4 w-4 mr-2" />
+              <BsGithub  className="h-5 w-5 mr-2" />
               <span className="text-gray-300 text-sm">GitHub</span>
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    {error && (
+    <div className="text-red-500 text-sm text-center mb-4">
+      {error}
+    </div>
+  )}
+    </>
   );
 }
 

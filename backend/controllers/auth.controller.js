@@ -40,7 +40,7 @@ const register =  (async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: "none"
         };
        
@@ -72,7 +72,7 @@ const login = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: "none"
         };
         

@@ -6,10 +6,20 @@ import { FaRegCircleUser } from "react-icons/fa6";
 
 import { NavLink } from "react-router-dom";
 import { useScrollPosition } from "../hooks/useScrollPosition";
+import {useAuth} from "../context/contexts-Files/authContext";
 
 function Navbar() {
   const scrollPosition = useScrollPosition();
   const isScrolled = scrollPosition > 0;
+ const {signout,token} = useAuth();
+ const handleSignOut = () => {
+   try {
+    signout();
+    console.log("User signed out");
+   } catch (error) {
+     console.error("Sign out error:", error);
+   }
+  };
 
   return (
     <nav
@@ -87,12 +97,12 @@ function Navbar() {
             </NavLink>
           </li>
           <li>
-            <NavLink
+            {!token?(<NavLink
               to="/sign-in"
               className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 font-medium"
             >
               Sign In
-            </NavLink>
+            </NavLink>):(<button className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 font-medium" onClick={handleSignOut}>Sign Out</button>)}
           </li>
         </ul>
       </div>

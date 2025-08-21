@@ -7,6 +7,13 @@ import Tools from './pages/Tools';
 import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
 import SignIn from "./pages/SignIn"
+import {AuthProvider}  from './context/Providers/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute';
+import Learn from './pages/Learn';
+import Roadmap from './pages/Roadmap';
+import Explain from './pages/Explain';
+import Review from './pages/Review';
+import PricingDetails from './pages/PricingDetails';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -14,9 +21,56 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/about', element: <About /> },
-      { path: '/pricing', element: <Pricing /> },
-      { path: '/tools', element: <Tools /> },
-      { path: '/profile', element: <Profile /> },
+      { path: '/pricing', element: <Pricing /> ,children: [{
+        path: '/pricing/:id',
+        element: (
+          <ProtectedRoute>
+            <PricingDetails />
+          </ProtectedRoute>
+        )
+      }]},
+      { path: '/tools', element: <Tools />,children: [
+        {
+          path: '/tools/learn',
+          element: (
+            <ProtectedRoute>
+              <Learn />
+            </ProtectedRoute>
+          )
+        },
+        {
+          path: '/tools/roadmap',
+          element: (
+            <ProtectedRoute>
+              <Roadmap />
+            </ProtectedRoute>
+          )
+        },
+        {
+          path: '/tools/review',
+          element: (
+            <ProtectedRoute>
+              <Review />
+            </ProtectedRoute>
+          )
+        },
+        {
+          path: '/tools/explain',
+          element: (
+            <ProtectedRoute>
+              <Explain />
+            </ProtectedRoute>
+          )
+        }
+      ]},
+      {
+        path: '/profile',
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ) 
+      },
     ],
   },
   { path: '/sign-up', element: <SignUp /> },
@@ -24,7 +78,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;
