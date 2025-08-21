@@ -24,6 +24,7 @@ function SignIn() {
       console.log('User signed in:', formData);
     } catch (error) {
       setError(error.message);
+      console.log(error)
     }
   };
 

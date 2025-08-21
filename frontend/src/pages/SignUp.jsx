@@ -34,6 +34,7 @@ function SignUp() {
       console.log("User signed up:", formData);
     } catch (error) {
       setError(error.message);
+      console.log(error);
     }
   };
 
