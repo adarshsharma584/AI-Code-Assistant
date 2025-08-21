@@ -1,28 +1,184 @@
+# AI Code Assistant - Backend
+
+## Overview
+
+The backend of AI Code Assistant is built with Node.js and Express, providing a robust API for user authentication, code analysis, and AI-powered learning features. It integrates with MongoDB for data persistence and Google's Gemini API for AI capabilities.
+
+## Tech Stack
+
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB Atlas
+- **Authentication**: JWT (JSON Web Tokens)
+- **AI Integration**: Google Gemini API
+- **API Documentation**: Swagger/OpenAPI
+- **Package Manager**: npm
+- **Environment Management**: dotenv
+- **Code Quality**: ESLint, Prettier
 
 ## Project Structure
 
 ```
 backend/
-├── controllers/
-│   └── auth.controller.js
-├── middlewares/
-│   └── auth.middleware.js
-├── models/
-│   └── user.model.js
-├── routes/
-│   └── auth.route.js
-├── services/
-├── utils/
-│   └── dbConnection.js
-└── index.js
+├── config/               # Configuration files
+│   └── db.config.js      # Database configuration
+├── controllers/          # Request handlers
+│   ├── auth.controller.js
+│   ├── chat.controller.js
+│   └── user.controller.js
+├── middlewares/          # Custom middleware
+│   ├── auth.middleware.js
+│   └── error.middleware.js
+├── models/               # MongoDB models
+│   ├── user.model.js
+│   ├── chat.model.js
+│   └── message.model.js
+├── routes/               # API routes
+│   ├── auth.route.js
+│   ├── chat.route.js
+│   └── user.route.js
+├── services/            # Business logic
+│   ├── ai.service.js
+│   └── user.service.js
+├── utils/               # Utility functions
+│   ├── dbConnection.js
+│   ├── errorHandler.js
+│   └── logger.js
+├── .env.example        # Environment variables example
+├── .eslintrc.js        # ESLint configuration
+├── .prettierrc         # Prettier configuration
+├── package.json        # Project dependencies
+└── index.js           # Application entry point
 ```
 
-```
+## Data Flow
+
+1. **Request Handling**:
+   - Incoming HTTP requests are received by Express
+   - Request is routed to the appropriate controller
+   - Middleware processes the request (authentication, validation, etc.)
+
+2. **Business Logic**:
+   - Controllers call service layer for business logic
+   - Services interact with models for database operations
+   - External API calls (like Gemini AI) are made from services
+
+3. **Response Generation**:
+   - Processed data is sent back to the client
+   - Error handling middleware catches and processes errors
+   - Response is formatted according to API standards
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm (v7 or higher)
+- MongoDB Atlas account
+- Google Cloud account (for Gemini API)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/adarshsharma584/ai-code-assistant.git
+   cd ai-code-assistant/backend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Update the `.env` file with your configuration:
+   ```env
+   PORT=5000
+   MONGODB_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRES_IN=30d
+   JWT_COOKIE_EXPIRES=30
+   GEMINI_API_KEY=your_gemini_api_key
+   NODE_ENV=development
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   The server will start on `http://localhost:5000`
+
+### Available Scripts
+
+- `npm start`: Start the production server
+- `npm run dev`: Start the development server with nodemon
+- `npm test`: Run tests
+- `npm run lint`: Run ESLint
+- `npm run format`: Format code with Prettier
+
 ## API Documentation
 
-### Authentication Endpoints
+### Base URL
+`http://localhost:5000/api/v1`
+
+### Authentication
+All endpoints except `/auth/*` require a valid JWT token in the `Authorization` header.
+
+
+
+## Security
+
+- **Authentication**: JWT-based stateless authentication
+- **Password Hashing**: bcrypt with 10 salt rounds
+- **CORS**: Configured to allow requests from trusted origins
+
+
+## Database Schema
+
+### Users Collection
+```javascript
+{
+  _id: ObjectId,
+  fullName: String,
+  username: { type: String, unique: true },
+  email: { type: String, unique: true },
+  password: String,
+  avatar: String,
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  isEmailVerified: { type: Boolean, default: false },
+  lastLogin: Date,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Chats Collection
+```javascript
+{
+  _id: ObjectId,
+  userId: { type: ObjectId, ref: 'User' },
+  title: String,
+  messages: [{
+    role: { type: String, enum: ['user', 'assistant'] },
+    content: String,
+    timestamp: { type: Date, default: Date.now }
+  }],
+  tags: [String],
+  isArchived: { type: Boolean, default: false },
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+## API Endpoints
+
+### Authentication
 
 #### Register User
+- **URL**: `/auth/register`
 - **URL**: `/api/v1/auth/register`
 - **Method**: `POST`
 - **Request Body**:

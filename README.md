@@ -61,7 +61,7 @@ AI Code Assistant is an innovative web application designed to help students lea
 - **Database**: MongoDB Atlas (Cloud Database)
 - **Authentication**: JWT (JSON Web Tokens)
 - **AI Integration**: Google's Gemini API
-- **API Documentation**: Swagger/OpenAPI
+
 - **Package Manager**: npm
 - **Environment Management**: dotenv
 - **Code Quality**: ESLint, Prettier
@@ -193,9 +193,7 @@ The application follows a modern microservices architecture with clear separatio
    - Frontend: http://localhost:5173
    - Backend API: http://localhost:5000
 
-## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -203,6 +201,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - MongoDB Atlas for database hosting
 - React and Node.js communities for amazing open-source tools
 
-## 🤝 Contributing
 
-Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.
