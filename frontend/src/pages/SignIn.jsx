@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import handyBot from "../assets/handy-resize.png"
 import { BsGithub } from "react-icons/bs";
-import { Link, useNavigate } from 'react-router-dom';
-
+import { Link, useNavigate,useLocation} from 'react-router-dom';
 import { useAuth } from '../context/contexts-Files/authContext';
+
 
 function SignIn() {
   const [formData, setFormData] = useState({
@@ -13,12 +13,14 @@ function SignIn() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { signin } = useAuth();
+  const location = useLocation();
 
+  const from = location.state?.from?.pathname || "/";
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await signin(formData.email, formData.password);
-      navigate('/'); // Redirect to home page after successful login
+      navigate(from,{replace:true}); // Redirect to the original location after successful login
       console.log('User signed in:', formData);
     } catch (error) {
       setError(error.message);

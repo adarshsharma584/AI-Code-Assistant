@@ -63,16 +63,18 @@ const router = createBrowserRouter([
           )
         }
       ]},
-      {
-        path: '/profile',
-        element: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ) 
-      },
+     
     ],
   },
+   {
+        path: '/profile',
+        element: 
+        // (
+          // <ProtectedRoute>
+            <Profile />
+          // </ProtectedRoute>
+        // ) 
+      },
   { path: '/sign-up', element: <SignUp /> },
   { path: '/sign-in', element: <SignIn /> },
 ]);

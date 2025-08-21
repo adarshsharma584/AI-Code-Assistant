@@ -113,4 +113,22 @@ const logout = async (req,res)=> {
 }
 
         
-export { register,login,logout }
+const getCurrentUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        if(!userId){
+            return res.status(401).send("Unauthorized"); 
+        }
+        
+        const user = await User.findById(userId).select("-password -refreshToken");
+        if(!user){
+            return res.status(404).send("User not found"); 
+        }
+        
+        return res.status(200).json({user, message: "User fetched successfully"});
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
+
+export { register, login, logout, getCurrentUser }

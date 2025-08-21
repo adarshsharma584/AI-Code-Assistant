@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 function Footer() {
   return (
-    <footer className=" w-screen bg-gradient-to-br from-black to-gray-900 text-white py-16 relative overflow-hidden">
+    <footer className=" w-screen bg-black text-white py-16 relative overflow-hidden">
       
 
       <div className="container mx-auto px-4 relative z-10">
