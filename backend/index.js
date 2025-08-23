@@ -2,9 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import {authRouter} from './routes/auth.route.js';
+import { authRouter } from './routes/auth.route.js';
 import { chatRouter } from './routes/chat.route.js';
 import { userRouter } from './routes/user.route.js';
+import promptRouter from './routes/prompt.route.js';
 dotenv.config();
 
 import {connectDB} from './utils/dbConnection.js';
@@ -27,6 +28,7 @@ app.use(cors({
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/chats', chatRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/prompt', promptRouter);
 
 //Testing API
 app.get('/', (req, res) => {

@@ -6,6 +6,8 @@ import { generateContent, systemPrompts } from './gemini.service.js';
 
 /**
  * Generate a quiz based on a topic and difficulty level
+ * Intended for use with: QuizController (not yet implemented)
+ * 
  * @param {string} title - The title of the quiz
  * @param {string} topic - The topic of the quiz
  * @param {string} difficulty - The difficulty level (easy, medium, hard)
@@ -55,6 +57,8 @@ async function generateQuiz(title, topic, difficulty, questionCount = 10) {
 
 /**
  * Generate learning material based on a topic and level
+ * Intended for use with: LearningController (not yet implemented)
+ * 
  * @param {string} title - The title of the learning material
  * @param {string} topic - The topic to generate material about
  * @param {string} level - The difficulty level (beginner, intermediate, advanced)
@@ -74,6 +78,8 @@ async function generateLearningMaterial(title, topic, level) {
 
 /**
  * Generate code review feedback for submitted code
+ * Intended for use with: CodeReviewController (not yet implemented)
+ * 
  * @param {string} code - The code to review
  * @param {string} language - The programming language of the code
  * @param {string} context - Additional context about the code
@@ -93,6 +99,8 @@ async function generateCodeReview(code, language, context = "") {
 
 /**
  * Generate code explanation for submitted code
+ * Intended for use with: CodeExplanationController (not yet implemented)
+ * 
  * @param {string} code - The code to explain
  * @param {string} language - The programming language of the code
  * @returns {Promise<string>} - The generated code explanation
@@ -111,6 +119,8 @@ async function generateCodeExplanation(code, language) {
 
 /**
  * Generate a learning roadmap based on user's goals and current skills
+ * Intended for use with: RoadmapController (not yet implemented)
+ * 
  * @param {string} goal - The user's learning goal
  * @param {string} currentSkills - The user's current skills and knowledge
  * @param {string} timeframe - The timeframe for the roadmap (e.g., "3 months", "1 year")
@@ -130,9 +140,11 @@ async function generateLearningRoadmap(goal, currentSkills, timeframe) {
 
 /**
  * Generate a response for a chat message based on the page type
+ * Currently used by: chat.controller.js (ChatController)
+ * 
  * @param {string} pageType - The type of page (learn, review, explain, roadmap)
  * @param {string} message - The user's message
- * @param {Array} chatHistory - The chat history (optional)
+ * @param {Array} chatHistory - The chat history for context
  * @returns {Promise<string>} - The generated response
  */
 // Fallback responses for when the AI service is unavailable
@@ -178,6 +190,8 @@ async function generateChatResponse(pageType, message, chatHistory = []) {
 
 /**
  * Generate a practical problem-solving question based on a learning topic
+ * Intended for use with: ProblemController (not yet implemented)
+ * 
  * @param {string} topic - The topic the user is learning about
  * @param {string} difficulty - The difficulty level (beginner, intermediate, advanced)
  * @returns {Promise<Object>} - The generated problem with starter code and solution
@@ -226,6 +240,6 @@ export {
   generateCodeReview,
   generateCodeExplanation,
   generateLearningRoadmap,
-  generateChatResponse,
-  generateProblemSolvingQuestion
+  generateProblemSolvingQuestion,
+  generateChatResponse
 };
