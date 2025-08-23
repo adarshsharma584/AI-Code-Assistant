@@ -15,6 +15,7 @@ function ProtectedRoute({ children }) {
   }
 
   if (!user) {
+    // Pass the current path as 'from' in the location state
     return <Navigate to="/sign-in" state={{ from: location }} replace />;
   }
 

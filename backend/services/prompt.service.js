@@ -135,6 +135,15 @@ async function generateLearningRoadmap(goal, currentSkills, timeframe) {
  * @param {Array} chatHistory - The chat history (optional)
  * @returns {Promise<string>} - The generated response
  */
+// Fallback responses for when the AI service is unavailable
+const fallbackResponses = {
+  learn: "I'm currently unable to generate learning materials. Please try again later or check your API key and quota.",
+  review: "I can't provide code reviews at the moment. Please try again in a few minutes.",
+  explain: "I'm having trouble explaining this right now. Please try again later.",
+  roadmap: "I can't generate a learning roadmap right now. Please check back soon.",
+  default: "I'm sorry, I'm having trouble connecting to the AI service. Please try again later."
+};
+
 async function generateChatResponse(pageType, message, chatHistory = []) {
   if (!systemPrompts[pageType]) {
     throw new Error(`Invalid page type: ${pageType}`);
@@ -156,7 +165,14 @@ async function generateChatResponse(pageType, message, chatHistory = []) {
     return await generateContent(userPrompt, systemPrompts[pageType], { temperature: 0.8 });
   } catch (error) {
     console.error("Error generating chat response:", error);
-    throw new Error("Failed to generate chat response");
+    
+    // Return a fallback response instead of throwing an error
+    if (error.message.includes('quota') || error.message.includes('limit')) {
+      return fallbackResponses[pageType] || fallbackResponses.default;
+    }
+    
+    // If it's a different error, still return a helpful message
+    return "I'm having trouble processing your request. The AI service might be temporarily unavailable. Please try again in a few minutes.";
   }
 }
 

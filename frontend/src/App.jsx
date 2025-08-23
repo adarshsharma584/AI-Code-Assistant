@@ -29,51 +29,81 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         )
       }]},
-      { path: '/tools', element: <Tools />,children: [
-        {
-          path: '/tools/learn',
-          element: (
-            <ProtectedRoute>
-              <Learn />
-            </ProtectedRoute>
-          )
-        },
-        {
-          path: '/tools/roadmap',
-          element: (
-            <ProtectedRoute>
-              <Roadmap />
-            </ProtectedRoute>
-          )
-        },
-        {
-          path: '/tools/review',
-          element: (
-            <ProtectedRoute>
-              <Review />
-            </ProtectedRoute>
-          )
-        },
-        {
-          path: '/tools/explain',
-          element: (
-            <ProtectedRoute>
-              <Explain />
-            </ProtectedRoute>
-          )
-        }
-      ]},
+      { 
+        path: '/tools', 
+        children: [
+          {
+            path: '',
+            element: <Tools />
+          },
+          {
+            path: 'learn',
+            element: (
+              <ProtectedRoute>
+                <Learn />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'roadmap',
+            element: (
+              <ProtectedRoute>
+                <Roadmap />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'review',
+            element: (
+              <ProtectedRoute>
+                <Review />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'explain',
+            element: (
+              <ProtectedRoute>
+                <Explain />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'debugger',
+            element: (
+              <ProtectedRoute>
+                <Review />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'formatter',
+            element: (
+              <ProtectedRoute>
+                <Review />
+              </ProtectedRoute>
+            )
+          },
+          {
+            path: 'api-tester',
+            element: (
+              <ProtectedRoute>
+                <Review />
+              </ProtectedRoute>
+            )
+          }
+        ]
+      },
      
     ],
   },
    {
         path: '/profile',
-        element: 
-        // (
-          // <ProtectedRoute>
+        element: (
+          <ProtectedRoute>
             <Profile />
-          // </ProtectedRoute>
-        // ) 
+          </ProtectedRoute>
+        )
       },
   { path: '/sign-up', element: <SignUp /> },
   { path: '/sign-in', element: <SignIn /> },

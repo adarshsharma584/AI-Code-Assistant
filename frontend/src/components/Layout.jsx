@@ -5,10 +5,12 @@ import Navbar from './Navbar';
 
 function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
-      <main className="flex-grow">
-        <Outlet />
+      <main className="flex-1 overflow-y-auto">
+        <div className="min-h-full">
+          <Outlet />
+        </div>
       </main>
       {/* <Footer /> */}
     </div>

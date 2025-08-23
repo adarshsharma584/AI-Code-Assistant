@@ -1,7 +1,7 @@
 import { ChatSession } from "../models/chatSession.model.js";
 import { Message } from "../models/message.model.js";
 import { generateChatResponse } from "../services/prompt.service.js";
-
+import fs from "fs";
 /**
  * Create a new chat session
  * @param {Object} req - Express request object
@@ -10,9 +10,9 @@ import { generateChatResponse } from "../services/prompt.service.js";
 const createChatSession = async (req, res) => {
   try {
     const { title } = req.body;
-    const {page}=req.params;
-    const userId = req.user._id;
-
+    const {page}=req.query;
+    const userId = req.user.id;
+    console.log(title,page,userId);
     if (!title || !page) {
       return res.status(400).json({ message: "Title and page are required" });
     }
@@ -35,6 +35,7 @@ const createChatSession = async (req, res) => {
     res.status(201).json({
       success: true,
       chatSession,
+      message:"chat created successfully"
     });
   } catch (error) {
     console.error("Error creating chat session:", error);
@@ -54,8 +55,8 @@ const createChatSession = async (req, res) => {
 const getChatSessionsByPage = async (req, res) => {
   try {
     const { page } = req.params;
-    const userId = req.user._id;
-
+    const userId = req.user.id;
+    console.log(page,userId)
     // Validate page type if provided
     if (page && page !== "all") {
       const validPages = ["learn", "review", "explain", "roadmap"];
@@ -81,6 +82,7 @@ const getChatSessionsByPage = async (req, res) => {
       success: true,
       count: chatSessions.length,
       chatSessions,
+      message:"chat sessions fetched successfully"
     });
   } catch (error) {
     console.error("Error fetching chat sessions:", error);
@@ -100,7 +102,7 @@ const getChatSessionsByPage = async (req, res) => {
 const getChatSessionById = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const chatSession = await ChatSession.findById(id).lean();
 
@@ -124,6 +126,7 @@ const getChatSessionById = async (req, res) => {
         ...chatSession,
         messages,
       },
+      message:"chat session fetched successfully"
     });
   } catch (error) {
     console.error("Error fetching chat session:", error);
@@ -140,71 +143,88 @@ const getChatSessionById = async (req, res) => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
+// // controllers/chat.controller.js (only sendMessage)
 const sendMessage = async (req, res) => {
   try {
     const { id } = req.params;
     const { content } = req.body;
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     if (!content) {
       return res.status(400).json({ message: "Message content is required" });
     }
 
     const chatSession = await ChatSession.findById(id);
-
-    if (!chatSession) {
-      return res.status(404).json({ message: "Chat session not found" });
-    }
-
-    // Check if the chat session belongs to the user
+    if (!chatSession) return res.status(404).json({ message: "Chat session not found" });
     if (chatSession.user.toString() !== userId.toString()) {
       return res.status(403).json({ message: "Unauthorized access to chat session" });
     }
 
-    // Create user message
+    // 1) Save the user message
     const userMessage = await Message.create({
       chatSession: id,
-      role: "user",
+      role: "user",          // ✅ matches schema enum ["user","ai"]
       content,
     });
 
-    // Get recent messages for context (limit to last 10 for performance)
+    // Push the message ObjectId into the session
+    chatSession.messages.push(userMessage._id);
+
+    // 2) Build recent history (last 10) for context
     const recentMessages = await Message.find({ chatSession: id })
       .sort({ createdAt: -1 })
       .limit(10)
       .lean();
 
-    // Reverse to get chronological order
-    const chatHistory = recentMessages.reverse();
+    const chronological = recentMessages.reverse(); // oldest → newest
+    // Convert to the structure your prompt.service expects for building context text
+    const chatHistory = chronological.map(m => ({
+      role: m.role,       // "user" | "ai"
+      content: m.content,
+    }));
 
-    // Generate AI response based on page type
-    const aiResponseContent = await generateChatResponse(
-      chatSession.page,
+    // 3) Generate AI response
+    const aiResponse = await generateChatResponse(
+      chatSession.page,   // "learn" | "review" | "explain" | "roadmap"
       content,
       chatHistory
     );
 
-    // Create AI message
+    // 4) Save AI message with role "ai" (✅ matches enum)
     const aiMessage = await Message.create({
-      chatSession: id,
+      chatSession: chatSession._id,
+      content: aiResponse,
       role: "ai",
-      content: aiResponseContent,
+      metadata: { page: chatSession.page },
     });
 
-    // Update lastUpdated timestamp
-    chatSession.lastUpdated = Date.now();
-    await chatSession.save();
+    // Push AI message id
+    chatSession.messages.push(aiMessage._id);
 
+    // 5) Save session
+    await chatSession.save();
+    const chatMessages= [userMessage, aiMessage];
+    console.log(userMessage);
+    console.log("aiMEssage:",aiMessage)
+    const markdownContent = chatMessages[1]?.content;
+
+// Write to file
+fs.writeFileSync("lesson.md", markdownContent, "utf-8");
+
+console.log("✅ Markdown file created: lesson.md");
+    console.log(chatMessages);
+    // 6) Respond
     res.status(200).json({
       success: true,
-      messages: [userMessage, aiMessage],
+      chatMessages,
+      message: "message sent successfully",
     });
   } catch (error) {
     console.error("Error sending message:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Failed to send message", 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: "Failed to send message",
+      error: error.message,
     });
   }
 };
@@ -217,7 +237,7 @@ const sendMessage = async (req, res) => {
 const deleteChatSession = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const chatSession = await ChatSession.findById(id);
 

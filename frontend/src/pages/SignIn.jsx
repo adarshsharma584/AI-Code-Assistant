@@ -15,12 +15,19 @@ function SignIn() {
   const { signin } = useAuth();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || "/";
+  // Get the redirect path from location state or use the current path
+  const from = location.state?.from || "/";
+  console.log('SignIn location state:', location.state);
+  console.log('Current pathname:', location.pathname);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await signin(formData.email, formData.password);
-      navigate(from,{replace:true}); // Redirect to the original location after successful login
+      // Use replace: true to prevent going back to sign-in with browser back button
+      navigate(from, { replace: true });
+      console.log('Redirecting to:', from);
+      console.log("location:",location);
+      console.log("from:",from);
       console.log('User signed in:', formData);
     } catch (error) {
       setError(error.message);

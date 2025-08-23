@@ -16,7 +16,7 @@ function SignUp() {
   const navigate = useNavigate();
   const { signup } = useAuth();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from|| "/";
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -31,6 +31,8 @@ function SignUp() {
         formData.password
       );
       navigate(from, { replace: true }); // Redirect to the original location after successful signup
+      console.log("location:",location);
+      console.log("from:",from);
       console.log("User signed up:", formData);
     } catch (error) {
       setError(error.message);
