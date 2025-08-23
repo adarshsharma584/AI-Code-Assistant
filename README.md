@@ -61,10 +61,10 @@ AI Code Assistant is an innovative web application designed to help students lea
 - **Database**: MongoDB Atlas (Cloud Database)
 - **Authentication**: JWT (JSON Web Tokens)
 - **AI Integration**: Google's Gemini API
-
 - **Package Manager**: npm
 - **Environment Management**: dotenv
 - **Code Quality**: ESLint, Prettier
+
 
 ### Frontend
 - **Framework**: React.js with Vite

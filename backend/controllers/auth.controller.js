@@ -48,7 +48,7 @@ const register =  (async (req, res) => {
         res.cookie("accessToken", accessToken, options);
        return res.status(201).json({user, accessToken, refreshToken, message:"User registered successfully"});
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({error: error, message: "Internal Server Error"});
      }
 })
 
@@ -81,7 +81,7 @@ const login = async (req, res) => {
         return res.status(200).json({user, accessToken, refreshToken, message:"User logged in successfully"});
        
     }catch(error){
-        res.status(500).json({error: error.message});
+        res.status(500).json({error: error, message: "Internal Server Error"});
     }
 }
 
@@ -108,7 +108,7 @@ const logout = async (req,res)=> {
         res.clearCookie("accessToken", options);
         return res.status(200).json({success: true, message: "User logged out successfully"});
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({error: error, message: "Internal Server Error"});
     }
 }
 
@@ -127,7 +127,7 @@ const getCurrentUser = async (req, res) => {
         
         return res.status(200).json({user, message: "User fetched successfully"});
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({error: error, message: "Internal Server Error"});
     }
 }
 

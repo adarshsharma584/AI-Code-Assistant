@@ -41,8 +41,8 @@ const createChatSession = async (req, res) => {
     console.error("Error creating chat session:", error);
     res.status(500).json({ 
       success: false, 
-      message: "Failed to create chat session", 
-      error: error.message 
+      message: "Internal Server Error",
+      error: error
     });
   }
 };
@@ -88,8 +88,8 @@ const getChatSessionsByPage = async (req, res) => {
     console.error("Error fetching chat sessions:", error);
     res.status(500).json({ 
       success: false, 
-      message: "Failed to fetch chat sessions", 
-      error: error.message 
+      message: "Internal Server Error",
+      error: error
     });
   }
 };
@@ -132,8 +132,8 @@ const getChatSessionById = async (req, res) => {
     console.error("Error fetching chat session:", error);
     res.status(500).json({ 
       success: false, 
-      message: "Failed to fetch chat session", 
-      error: error.message 
+      message: "Internal Server Error",
+      error: error
     });
   }
 };
@@ -223,8 +223,8 @@ console.log("✅ Markdown file created: lesson.md");
     console.error("Error sending message:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to send message",
-      error: error.message,
+      message: "Internal Server Error",
+      error: error
     });
   }
 };
@@ -264,8 +264,8 @@ const deleteChatSession = async (req, res) => {
     console.error("Error deleting chat session:", error);
     res.status(500).json({ 
       success: false, 
-      message: "Failed to delete chat session", 
-      error: error.message 
+      message: "Internal Server Error",
+      error: error
     });
   }
 };
