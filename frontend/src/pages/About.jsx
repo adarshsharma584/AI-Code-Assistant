@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiCode, FiUsers, FiZap, FiShield } from 'react-icons/fi';
-import homeBg from '../assets/chat-bot bg.png';
 
 function About() {
   return (

@@ -1,134 +1,52 @@
-import {User} from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 
-const generateAccessAndRefreshTokens = async (user) => {
-
-    if(!user){
-         throw new Error("User not found");
-    }
-
-   const accessToken = await user.generateAccessToken();
-   const refreshToken = await user.generateRefreshToken();
-
-   return { accessToken, refreshToken };
-};
-
-const register =  (async (req, res) => {
-    try {
-        //register user 
-        const {fullName, username,email,password} = req.body;
-
-        if(!fullName || !username || !email || !password){
-            return res.status(400).send("All fields are required");
-        }
-
-        const existedUser = await User.findOne({ email });
-        if (existedUser) {
-            return res.status(409).send("User already exists");
-        }
-
-
-        const user = await User.create({
-            fullName,
-            username,
-            email,
-            password
-        });
-
-        const {refreshToken , accessToken} = await generateAccessAndRefreshTokens(user);
-        user.refreshToken = refreshToken;
-        await user.save();
-
-        const options = {
-            httpOnly: true,
-            secure: false,
-            sameSite: "none"
-        };
-       
-        res.cookie("refreshToken", refreshToken, options);
-        res.cookie("accessToken", accessToken, options);
-       return res.status(201).json({user, accessToken, refreshToken, message:"User registered successfully"});
-    } catch (error) {
-        res.status(500).json({error: error, message: "Internal Server Error"});
-     }
-})
-
-const login = async (req, res) => {
-    try {
-        const {email, password} = req.body;
-        if(!email ||!password){
-            return res.status(400).send("All fields are required");
-        }
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-        const isPasswordValid = await user.isPasswordCorrect(password);
-        if (!isPasswordValid) {
-            return res.status(401).send("Invalid credentials");
-        }
-        const {refreshToken, accessToken} = await generateAccessAndRefreshTokens(user);
-        user.refreshToken = refreshToken;
-        await user.save();
-
-        const options = {
-            httpOnly: true,
-            secure: false,
-            sameSite: "none"
-        };
-        
-        res.cookie("refreshToken", refreshToken, options);
-        res.cookie("accessToken", accessToken, options);
-        return res.status(200).json({user, accessToken, refreshToken, message:"User logged in successfully"});
-       
-    }catch(error){
-        res.status(500).json({error: error, message: "Internal Server Error"});
-    }
+function setTokens(res, accessToken, refreshToken) {
+  const secure = false;
+  res.cookie("accessToken", accessToken, { httpOnly: true, sameSite: "lax", secure, maxAge: 1000 * 60 * 60 });
+  res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: "lax", secure, maxAge: 1000 * 60 * 60 * 24 * 7 });
 }
 
-const logout = async (req,res)=> {
-    try {
-        const userId = req.user.id;
-        if(!userId){
-            return res.status(401).send("Unauthorized"); 
-        }
-        const user = await User.findById(userId);
-        if(!user){
-            return res.status(404).send("User not found"); 
-        }
-        user.refreshToken = null;
-        await user.save();
-        
-        const options = {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        };
-        
-        res.clearCookie("refreshToken", options);
-        res.clearCookie("accessToken", options);
-        return res.status(200).json({success: true, message: "User logged out successfully"});
-    } catch (error) {
-        res.status(500).json({error: error, message: "Internal Server Error"});
-    }
+export async function register(req, res) {
+  try {
+    const { fullName, username, email, password } = req.body;
+    if (!fullName || !username || !email || !password) return res.status(400).json({ success: false, message: "All fields are required" });
+    const existing = await User.findOne({ $or: [{ email }, { username }] });
+    if (existing) return res.status(409).json({ success: false, message: "User already exists" });
+    const user = await User.create({ fullName, username, email, password });
+    const { accessToken, refreshToken } = user.generateTokens();
+    setTokens(res, accessToken, refreshToken);
+    return res.status(201).json({ success: true, user: { id: user._id, fullName, username, email }, accessToken });
+  } catch (e) {
+    console.error("Registration error:", e);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
 }
 
-        
-const getCurrentUser = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        if(!userId){
-            return res.status(401).send("Unauthorized"); 
-        }
-        
-        const user = await User.findById(userId).select("-password -refreshToken");
-        if(!user){
-            return res.status(404).send("User not found"); 
-        }
-        
-        return res.status(200).json({user, message: "User fetched successfully"});
-    } catch (error) {
-        res.status(500).json({error: error, message: "Internal Server Error"});
-    }
+export async function login(req, res) {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ success: false, message: "Invalid credentials" });
+    const ok = await user.comparePassword(password);
+    if (!ok) return res.status(401).json({ success: false, message: "Invalid credentials" });
+    const { accessToken, refreshToken } = user.generateTokens();
+    setTokens(res, accessToken, refreshToken);
+    return res.status(200).json({ success: true, user: { id: user._id, fullName: user.fullName, username: user.username, email }, accessToken });
+  } catch (e) {
+    console.error("Login error:", e);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
 }
 
-export { register, login, logout, getCurrentUser }
+export async function logout(req, res) {
+  try {
+    // Clear the refresh token from the user in database
+    const user = await User.findByIdAndUpdate(req.user.id, { refreshToken: null });
+    res.clearCookie("refreshToken");
+
+    return res.status(200).json({ success: true, message: "Logged out successfully" });
+  } catch (e) {
+    console.error("Logout error:", e);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+}

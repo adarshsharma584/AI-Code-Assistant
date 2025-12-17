@@ -1,25 +1,14 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-export const authMiddleware = async (req, res, next) => {
-    try {
-        const token = req.cookies.accessToken || (req.header("Authorization") ? req.header("Authorization").replace("Bearer ", "") : null);
-
-        if(!token){
-            return res.status(401).json({
-                success: false,
-                message: "Token is missing",
-            });
-        }
-
-        const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-        req.user = decoded;
-        next();
-    } catch (error) {
-        return res.status(401).json({
-            success: false,
-            message: "Invalid token",
-            error: error.message
-        });
-    }
+export function authMiddleware(req, res, next) {
+  try {
+    const header = req.headers.authorization || "";
+    const token = header.startsWith("Bearer ") ? header.slice(7) : req.cookies?.accessToken;
+    if (!token) return res.status(401).json({ success: false, message: "unauthorized" });
+    const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.user = { id: payload.id, username: payload.username, email: payload.email };
+    next();
+  } catch (err) {
+    return res.status(401).json({ success: false, message: "unauthorized" });
+  }
 }
