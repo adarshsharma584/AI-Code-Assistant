@@ -91,7 +91,7 @@ function Review() {
         title: 'New Code Review' 
       });
       
-      setCurrentSessionId(response.data.chatSession._id);
+      setCurrentSessionId(response.data.reviewSession._id);
       setCode('// Write your code here...');
       setMarkdown('## Code Review\nYour reviewed code will appear here');
       
@@ -113,7 +113,7 @@ function Review() {
       const messages = session.messages || [];
       if (messages.length >= 2) {
         const userMessage = messages.find(m => m.role === 'user');
-        const aiMessage = messages.find(m => m.role === 'assistant');
+        const aiMessage = messages.find(m => m.role === 'ai');
         
         if (userMessage) setCode(userMessage.content);
         if (aiMessage) setMarkdown(aiMessage.content);

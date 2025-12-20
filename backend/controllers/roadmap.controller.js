@@ -14,9 +14,12 @@ export async function createRoadmapSession(req, res) {
 
 export async function getRoadmapSessions(req, res) {
   try {
-    const sessions = await ChatSession.find({ user: req.user.id, page: "roadmap" }).sort({ updatedAt: -1 });
+    const sessions = await ChatSession.find({ user: req.user.id, page: "roadmap" })
+      .populate("messages")
+      .sort({ updatedAt: -1 });
     return res.status(200).json({ success: true, roadmapSessions: sessions });
   } catch (e) {
+    console.error("Error getting roadmap sessions:", e);
     return res.status(500).json({ success: false, message: "error" });
   }
 }
@@ -26,6 +29,12 @@ export async function generateRoadmapHandler(req, res) {
     const { goal, currentSkills, timeframe, sessionId } = req.body;
     let session = sessionId ? await ChatSession.findById(sessionId) : null;
     if (!session) session = await ChatSession.create({ user: req.user.id, title: `Roadmap: ${goal}`, page: "roadmap" });
+
+    // Check if user owns this session
+    if (session.user.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
+    }
+
     const roadmap = await generateRoadmap({ goal, currentSkills, timeframe });
     const userMsg = await Message.create({ chatSession: session._id, role: "user", content: goal });
     const aiMsg = await Message.create({ chatSession: session._id, role: "ai", content: roadmap });
@@ -33,6 +42,22 @@ export async function generateRoadmapHandler(req, res) {
     await session.save();
     return res.status(200).json({ success: true, roadmap, sessionId: session._id });
   } catch (e) {
+    console.error("Error generating roadmap:", e);
+    return res.status(500).json({ success: false, message: "error" });
+  }
+}
+
+export async function deleteRoadmapSession(req, res) {
+  try {
+    const sessionId = req.params.id;
+    const session = await ChatSession.findOne({ _id: sessionId, user: req.user.id });
+    if (!session) return res.status(404).json({ success: false, message: "not found" });
+
+    await Message.deleteMany({ chatSession: sessionId });
+    await ChatSession.findByIdAndDelete(sessionId);
+    return res.status(200).json({ success: true });
+  } catch (e) {
+    console.error("Error deleting roadmap session:", e);
     return res.status(500).json({ success: false, message: "error" });
   }
 }

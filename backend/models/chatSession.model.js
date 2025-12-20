@@ -4,7 +4,7 @@ const chatSessionSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, required: true, trim: true },
-    page: { type: String, required: true, enum: ["learn", "review", "explain", "roadmap"], default: "learn" },
+    page: { type: String, required: true, enum: ["learn", "review", "explain", "roadmap", "debugger", "formatter", "api-tester"], default: "learn" },
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     lastUpdated: { type: Date, default: Date.now },
   },

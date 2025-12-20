@@ -30,27 +30,7 @@ const toolCards = [
     path: '/tools/roadmap',
     gradient: 'from-amber-500 to-yellow-300'
   },
-  {
-    title: 'Code Debugger',
-    description: 'Find and fix issues in your code with AI assistance',
-    icon: '🐞',
-    path: '/tools/debugger',
-    gradient: 'from-red-500 to-pink-500'
-  },
-  {
-    title: 'Code Formatter',
-    description: 'Automatically format your code to follow best practices',
-    icon: '✨',
-    path: '/tools/formatter',
-    gradient: 'from-green-500 to-emerald-400'
-  },
-  {
-    title: 'API Tester',
-    description: 'Test and debug your API endpoints with ease',
-    icon: '🔌',
-    path: '/tools/api-tester',
-    gradient: 'from-purple-500 to-indigo-500'
-  }
+  
 ];
 
 function Tools() {

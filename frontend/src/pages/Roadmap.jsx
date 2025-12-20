@@ -78,15 +78,11 @@ function Roadmap() {
     try {
       const response = await api.post('/roadmap/generate', { 
         sessionId: currentSessionId,
-        topic 
+        goal: topic
       });
       
-      if (response.data.roadmapSession) {
-        setMarkdown(response.data.roadmapSession.messages?.[0]?.content || '## Roadmap\nYour roadmap will appear here');
-        setCurrentSessionId(response.data.roadmapSession._id);
-      } else {
-        setMarkdown(response.data.roadmap || '## Roadmap\nYour roadmap will appear here');
-      }
+      setMarkdown(response.data.roadmap || '## Roadmap\nYour roadmap will appear here');
+      setCurrentSessionId(response.data.sessionId || currentSessionId);
       
       setTopic('');
       
