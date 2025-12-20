@@ -191,7 +191,7 @@ The application follows a modern microservices architecture with clear separatio
 
 4. **Access the application**
    - Frontend: http://localhost:5173
-   - Backend API: http://localhost:5000
+   - Backend API: https://ai-code-assistant-one.vercel.app/
 
 
 

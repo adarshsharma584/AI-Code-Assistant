@@ -58,12 +58,14 @@ frontend/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/adarshsharma584/ai-code-assistant.git
    cd ai-code-assistant/frontend
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -71,12 +73,15 @@ frontend/
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
+
    Update the `.env` file with your configuration:
+
    ```env
-   VITE_API_BASE_URL=http://localhost:5000/api/v1
+   VITE_API_BASE_URL=https://ai-code-assistant-one.vercel.app/api/v1
    VITE_APP_NAME=AI Code Assistant
    NODE_ENV=development
    ```
@@ -112,12 +117,13 @@ The application uses Tailwind CSS for styling with the following conventions:
 API calls are handled through the `src/services` directory. Each service corresponds to a specific API resource.
 
 Example service:
+
 ```javascript
 // src/services/auth.service.js
-import api from './api';
+import api from "./api";
 
 export const login = async (credentials) => {
-  const response = await api.post('/auth/login', credentials);
+  const response = await api.post("/auth/login", credentials);
   return response.data;
 };
 ```
@@ -125,6 +131,7 @@ export const login = async (credentials) => {
 ## 🧪 Testing
 
 Run tests with:
+
 ```bash
 npm test
 ```
@@ -132,6 +139,7 @@ npm test
 ## 🚀 Deployment
 
 1. Build the production version:
+
    ```bash
    npm run build
    ```
@@ -145,8 +153,6 @@ npm test
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-
 
 ## 🙏 Acknowledgments
 

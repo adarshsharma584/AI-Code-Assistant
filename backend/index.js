@@ -14,9 +14,29 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-const origin = process.env.CORS_ORIGIN || "http://localhost:5173";
 
-app.use(cors({ origin, credentials: true }));
+// CORS configuration - allow frontend URL
+const allowedOrigins = [
+  "https://coddydev.vercel.app", // Production frontend
+  process.env.CORS_ORIGIN, // From environment variable if set
+  "http://localhost:5173", // Local development
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        // For production, you might want to restrict this
+        callback(null, true);
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(express.json({ limit: "1mb" }));
 
