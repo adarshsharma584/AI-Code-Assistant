@@ -1,5 +1,19 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { AuthContext } from "../contexts-Files/authContext";
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
+});
+
+// Attach token automatically
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -7,40 +21,19 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initial auth check
+  // 🔹 Verify auth on first load
   useEffect(() => {
     const verifyAuth = async () => {
-      const currentToken = localStorage.getItem("token");
-
-      if (!currentToken) {
-        setUser(null);
+      if (!token) {
         setLoading(false);
         setIsInitialized(true);
         return;
       }
 
       try {
-        const response = await fetch(`/api/users/me`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setUser(data.user);
-          setToken(currentToken);
-        } else {
-          localStorage.removeItem("token");
-          setToken(null);
-          setUser(null);
-        }
+        const res = await api.get("/users/me");
+        setUser(res.data.user);
       } catch (error) {
-        console.error("Auth verification failed:", error);
         localStorage.removeItem("token");
         setToken(null);
         setUser(null);
@@ -50,134 +43,66 @@ export function AuthProvider({ children }) {
       }
     };
 
-    if (!isInitialized) {
-      verifyAuth();
-    }
-  }); // Only run on mount
+    verifyAuth();
+  }, []);
 
-  // Sign up function
+  // 🔹 Signup
   const signup = async (fullName, username, email, password) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch(`/api/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ fullName, username, email, password }),
-        credentials: "include", // Include cookies in request
+      const res = await api.post("/auth/register", {
+        fullName,
+        username,
+        email,
+        password,
       });
 
-      const data = await response.json();
+      localStorage.setItem("token", res.data.accessToken);
+      setToken(res.data.accessToken);
+      setUser(res.data.user);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to sign up");
-      }
-
-      localStorage.setItem("token", data.accessToken);
-      setToken(data.accessToken);
-      setUser(data.user);
-      return data;
-    } catch (error) {
-      console.error("Signup error:", error);
-      throw error;
+      return res.data;
     } finally {
       setLoading(false);
     }
   };
 
-  // Sign in function
+  // 🔹 Signin
   const signin = async (email, password) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch(`/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: "include", // Include cookies in request
-      });
+      const res = await api.post("/auth/login", { email, password });
 
-      const data = await response.json();
+      localStorage.setItem("token", res.data.accessToken);
+      setToken(res.data.accessToken);
+      setUser(res.data.user);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to sign in");
-      }
-
-      localStorage.setItem("token", data.accessToken);
-      setToken(data.accessToken);
-      setUser(data.user);
-      return data;
-    } catch (error) {
-      console.error("Signin error:", error);
-      throw error;
+      return res.data;
     } finally {
       setLoading(false);
     }
   };
 
-  // Sign out function
+  // 🔹 Signout
   const signout = async () => {
     try {
-      const currentToken = localStorage.getItem("token");
-      if (!currentToken) return;
-
-      const response = await fetch(`/api/auth/logout`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentToken}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Include cookies in request
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to sign out");
-      }
-
+      await api.post("/auth/logout");
+    } catch (_) {
+      // ignore server error
+    } finally {
       localStorage.removeItem("token");
       setToken(null);
       setUser(null);
-    } catch (error) {
-      console.error("Signout error:", error);
-      // Still clear local state even if server request fails
-      localStorage.removeItem("token");
-      setToken(null);
-      setUser(null);
-      throw error;
     }
   };
 
-  // Add myProfile function
+  // 🔹 Get profile manually
   const myProfile = async () => {
-    try {
-      const currentToken = localStorage.getItem("token");
-      if (!currentToken) return;
-
-      const response = await fetch(`/api/users/me`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${currentToken}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setUser(data.user);
-      } else {
-        throw new Error(data.message || "Failed to fetch profile");
-      }
-    } catch (error) {
-      console.error("Profile fetch failed:", error);
-      throw error;
-    }
+    const res = await api.get("/users/me");
+    setUser(res.data.user);
+    return res.data.user;
   };
 
-  // Modify the value object
   const value = {
     user,
     token,
@@ -189,11 +114,10 @@ export function AuthProvider({ children }) {
     myProfile,
   };
 
-  // Don't render children until initial auth check is complete
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-600"></div>
       </div>
     );
   }
