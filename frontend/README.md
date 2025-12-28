@@ -81,7 +81,7 @@ frontend/
    Update the `.env` file with your configuration:
 
    ```env
-   VITE_API_BASE_URL=https://ai-code-assistant-one.vercel.app/api/v1
+   VITE_API_BASE_URL=${import.meta.env}
    VITE_APP_NAME=AI Code Assistant
    NODE_ENV=development
    ```

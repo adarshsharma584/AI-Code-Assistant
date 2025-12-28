@@ -20,17 +20,14 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const response = await fetch(
-          "https://ai-code-assistant-one.vercel.app/api/v1/users/me",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${currentToken}`,
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        const response = await fetch(`/api/users/me`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${currentToken}`,
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
 
         const data = await response.json();
 
@@ -56,23 +53,20 @@ export function AuthProvider({ children }) {
     if (!isInitialized) {
       verifyAuth();
     }
-  }, []); // Only run on mount
+  }); // Only run on mount
 
   // Sign up function
   const signup = async (fullName, username, email, password) => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "https://ai-code-assistant-one.vercel.app/api/v1/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ fullName, username, email, password }),
-          credentials: "include", // Include cookies in request
-        }
-      );
+      const response = await fetch(`/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fullName, username, email, password }),
+        credentials: "include", // Include cookies in request
+      });
 
       const data = await response.json();
 
@@ -96,17 +90,14 @@ export function AuthProvider({ children }) {
   const signin = async (email, password) => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "https://ai-code-assistant-one.vercel.app/api/v1/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-          credentials: "include", // Include cookies in request
-        }
-      );
+      const response = await fetch(`/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // Include cookies in request
+      });
 
       const data = await response.json();
 
@@ -132,17 +123,14 @@ export function AuthProvider({ children }) {
       const currentToken = localStorage.getItem("token");
       if (!currentToken) return;
 
-      const response = await fetch(
-        "https://ai-code-assistant-one.vercel.app/api/v1/auth/logout",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Include cookies in request
-        }
-      );
+      const response = await fetch(`/api/auth/logout`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${currentToken}`,
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Include cookies in request
+      });
 
       if (!response.ok) {
         throw new Error("Failed to sign out");
@@ -167,17 +155,14 @@ export function AuthProvider({ children }) {
       const currentToken = localStorage.getItem("token");
       if (!currentToken) return;
 
-      const response = await fetch(
-        "https://ai-code-assistant-one.vercel.app/api/v1/users/me",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${currentToken}`,
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`/api/users/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${currentToken}`,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
       const data = await response.json();
 

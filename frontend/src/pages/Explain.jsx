@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: "https://ai-code-assistant-one.vercel.app/api/v1",
+  baseURL: `/api`,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
@@ -155,7 +155,7 @@ function Explain() {
         {/* MAIN PANELS */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 min-h-[1000px]">
           {/* CODE INPUT */}
-          <div className= "relative bg-black text-white  border-r p-5 space-y-4">
+          <div className="relative bg-black text-white  border-r p-5 space-y-4">
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}

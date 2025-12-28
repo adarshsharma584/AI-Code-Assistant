@@ -15,7 +15,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: "https://ai-code-assistant-one.vercel.app/api/v1",
+  baseURL: `/api`,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
@@ -182,7 +182,9 @@ function Roadmap() {
           {/* Input */}
           <section className=" relative rounded-md min-h-[500px] bg-black text-white">
             <div className="p-4 flex justify-between items-center">
-              <h3 className="font-medium text-white text-md hover:text-blue-5">Generate Roadmap</h3>
+              <h3 className="font-medium text-white text-md hover:text-blue-5">
+                Generate Roadmap
+              </h3>
               <button onClick={() => setIsExpanded(!isExpanded)}>
                 {isExpanded ? <FiChevronDown /> : <FiChevronUp />}
               </button>
@@ -208,7 +210,7 @@ function Roadmap() {
                     disabled={isLoading || !topic.trim()}
                     className="px-6 py-2 text-bold bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
                   >
-                    Generate 
+                    Generate
                   </button>
                 </div>
               </form>
