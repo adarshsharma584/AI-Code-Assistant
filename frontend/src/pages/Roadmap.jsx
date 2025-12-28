@@ -147,29 +147,33 @@ function Roadmap() {
         )}
 
         {/* Main */}
-        <main className="flex-1 flex flex-col">
+        <main className="relative flex-1 flex flex-col">
           {/* Preview */}
           <section className="flex-1 overflow-y-auto p-6">
-            <div className="max-w-6xl mx-auto bg-gray-700 text-white border rounded-lg shadow-sm p-6 prose">
-              <ReactMarkdown
-                rehypePlugins={[rehypeRaw]}
-                components={{
-                  code({ inline, className, children }) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    return !inline && match ? (
-                      <SyntaxHighlighter style={oneDark} language={match[1]}>
-                        {String(children)}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code className="bg-gray-100 px-1 rounded">
-                        {children}
-                      </code>
-                    );
-                  },
-                }}
-              >
-                {markdown}
-              </ReactMarkdown>
+            <div className=" max-w-6xl mx-auto bg-gray-700 text-white border rounded-lg shadow-sm p-6 prose">
+              {isLoading ? (
+                <div className=" absolute  top-0 left-0 z-10 bottom-0 w-full h-full  loader"></div>
+              ) : (
+                <ReactMarkdown
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    code({ inline, className, children }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <SyntaxHighlighter style={oneDark} language={match[1]}>
+                          {String(children)}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className="bg-gray-100 px-1 rounded">
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                >
+                  {markdown}
+                </ReactMarkdown>
+              )}
 
               {isLoading && (
                 <p className="text-center text-gray-500 mt-6">

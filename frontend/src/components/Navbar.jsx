@@ -1,14 +1,16 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useScrollPosition } from "../hooks/useScrollPosition";
 import { useAuth } from "../context/contexts-Files/authContext";
 import { useState } from "react";
 
+
 function Navbar() {
+  const { token } = useAuth();
   const scrollPosition = useScrollPosition();
   const isScrolled = scrollPosition > 0;
   const { signout } = useAuth();
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
   const handleSignOut = () => {
     try {
       signout();
@@ -73,13 +75,25 @@ function Navbar() {
             Sign In
           </NavLink>
 
-          <button
+          {token ?
+            (<button
             onClick={handleSignOut}
             className="px-4 py-2 rounded-md bg-gray-600 text-white
                        hover:bg-gray-800 transition hover:cursor-pointer"
           >
             Sign Out
-          </button>
+            </button>)
+            :
+            (<button
+              onClick={() => { navigate("/sign-up") }}
+            className="px-4 py-2 rounded-md bg-gray-600 text-white
+                       hover:bg-gray-800 transition hover:cursor-pointer"
+          >
+            Sign Out
+          </button>)
+          }
+          
+          )
         </div>
 
         {/* Mobile Menu Button */}

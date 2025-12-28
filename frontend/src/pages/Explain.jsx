@@ -187,11 +187,15 @@ function Explain() {
           </div>
 
           {/* OUTPUT */}
-          <div className="bg-black text-white p-6 overflow-auto">
+          <div className="relative bg-black text-white p-6 overflow-auto">
             <div className="prose max-w-3xl mx-auto">
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                {markdown}
-              </ReactMarkdown>
+              {isLoading ? (
+                <div className=" absolute  top-0 left-0 z-10 bottom-0 w-full h-full  loader"></div>
+              ) : (
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                  {markdown}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
         </div>

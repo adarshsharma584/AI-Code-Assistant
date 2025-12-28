@@ -153,11 +153,15 @@ function Learn() {
           {/* INPUT */}
 
           {/* OUTPUT */}
-          <div className="bg-gray-700 min-h-[500px] w-full text-white p-6 overflow-auto">
-            <div className="prose  mx-auto">
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                {markdown}
-              </ReactMarkdown>
+          <div className="relative bg-gray-700 min-h-[500px] w-full text-white p-6 overflow-auto">
+            <div className="  prose  mx-auto">
+              {isLoading ? (
+                <div className=" absolute top-[60%] left-0 z-10 bottom-0 w-full h-full loader"></div>
+              ) : (
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                  {markdown}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
           <div className="relative bg-gray-700 w-full text-white border-r p-5 space-y-2  pb-16">

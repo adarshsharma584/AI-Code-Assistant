@@ -168,25 +168,8 @@ function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-400 pt-4 text-center">
-          <p className="text-gray-600 my-4">
-            &copy; {new Date().getFullYear()} Coddy.Dev. All rights reserved.
-          </p>
-          <div className="flex justify-center space-x-8">
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
-              (item) => (
-                <NavLink
-                  key={item}
-                  to={`/${item.toLowerCase().replace(" ", "")}`}
-                  className="text-gray-400 hover:text-white transition-colors duration-300 text-sm"
-                >
-                  {item}
-                </NavLink>
-              )
-            )}
-          </div>
-        </div>
+        
+        
       </div>
     </footer>
   );

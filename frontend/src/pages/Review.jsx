@@ -165,30 +165,34 @@ function Review() {
               Code Review
             </div>
 
-            <div className=" bg-[#1e1e1e] text-white flex-1 overflow-y-auto p-6 prose max-w-none">
-              <ReactMarkdown
-                rehypePlugins={[rehypeRaw]}
-                components={{
-                  code({ inline, className, children }) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    return !inline && match ? (
-                      <SyntaxHighlighter
-                        style={oneDark}
-                        language={match[1]}
-                        PreTag="div"
-                      >
-                        {String(children)}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code className="bg-black text-white font-mono px-1 rounded">
-                        {children}
-                      </code>
-                    );
-                  },
-                }}
-              >
-                {markdown}
-              </ReactMarkdown>
+            <div className=" relative bg-[#1e1e1e] text-white flex-1 overflow-y-auto p-6 prose max-w-none">
+              {isLoading ? (
+                <div className=" absolute top-0 left-0 z-10 bottom-0 w-full h-full loader"></div>
+              ) : (
+                <ReactMarkdown
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    code({ inline, className, children }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <SyntaxHighlighter
+                          style={oneDark}
+                          language={match[1]}
+                          PreTag="div"
+                        >
+                          {String(children)}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className="bg-black text-white font-mono px-1 rounded">
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                >
+                  {markdown}
+                </ReactMarkdown>
+              )}
             </div>
           </section>
         </main>

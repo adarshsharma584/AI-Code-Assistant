@@ -16,76 +16,86 @@ import Review from './pages/Review';
 import PricingDetails from './pages/PricingDetails';
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Layout />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: '/about', element: <About /> },
-      { path: '/pricing', element: <Pricing /> ,children: [{
-        path: '/pricing/:id',
-        element: (
-          <ProtectedRoute>
-            <PricingDetails />
-          </ProtectedRoute>
-        )
-      }]},
-      { 
-        path: '/tools', 
+      { path: "/", element: <Home /> },
+      { path: "/about", element: <About /> },
+      {
+        path: "/pricing",
+        element: <Pricing />,
         children: [
           {
-            path: '',
-            element: <Tools />
+            path: "/pricing/:id",
+            element: (
+              <ProtectedRoute>
+                <PricingDetails />
+              </ProtectedRoute>
+            ),
+          },
+        ],
+      },
+      {
+        path: "/tools",
+        children: [
+          {
+            path: "",
+            element: <Tools />,
           },
           {
-            path: 'learn',
+            path: "learn",
             element: (
-               <ProtectedRoute>
+              <ProtectedRoute>
                 <Learn />
-               </ProtectedRoute>
-            )
+              </ProtectedRoute>
+            ),
           },
           {
-            path: 'roadmap',
+            path: "roadmap",
             element: (
-               <ProtectedRoute>
+              <ProtectedRoute>
                 <Roadmap />
-               </ProtectedRoute>
-            )
+              </ProtectedRoute>
+            ),
           },
           {
-            path: 'review',
+            path: "review",
             element: (
-               <ProtectedRoute>
+              <ProtectedRoute>
                 <Review />
-               </ProtectedRoute>
-            )
+              </ProtectedRoute>
+            ),
           },
           {
-            path: 'explain',
+            path: "explain",
             element: (
               <ProtectedRoute>
                 <Explain />
-               </ProtectedRoute>
-            )
+              </ProtectedRoute>
+            ),
           },
-          
-          
-          
-        ]
+        ],
       },
-     
-    ],
-  },
-   {
-        path: '/profile',
+      {
+        path: "/profile",
         element: (
           <ProtectedRoute>
             <Profile />
           </ProtectedRoute>
-        )
+        ),
       },
-  { path: '/sign-up', element: <SignUp /> },
-  { path: '/sign-in', element: <SignIn /> },
+    ],
+  },
+  // {
+  //   path: "/profile",
+  //   element: (
+  //     <ProtectedRoute>
+  //       <Profile />
+  //     </ProtectedRoute>
+  //   ),
+  // },
+  { path: "/sign-up", element: <SignUp /> },
+  { path: "/sign-in", element: <SignIn /> },
 ]);
 
 function App() {
