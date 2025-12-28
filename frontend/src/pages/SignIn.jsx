@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import handyBot from "../assets/handy-resize.png"
-import { BsGithub } from "react-icons/bs";
+
 import { Link, useNavigate,useLocation} from 'react-router-dom';
 import { useAuth } from '../context/contexts-Files/authContext';
+
 
 
 function SignIn() {
@@ -36,119 +36,109 @@ function SignIn() {
   };
 
   return (
-   <> 
-   <div className='min-h-screen w-full bg-black flex  flex-col items-center justify-center  py-8 '>
+  <div className="min-h-screen bg-white flex items-center justify-center px-4 relative">
+        {/* Back to Home */}
+        <button
+          onClick={() => navigate("/")}
+          className="absolute top-10 left-6 text-bold text-lg text-gray-600 animate-bounce  hover:text-black transition "
+        >
+          ← Back to Home
+        </button>
+  
+        <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[40%]">
           {/* Header */}
-          <div className="text-start mb-6 flex justify-between items-end  w-[38%] relative">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-800 to-white text-transparent bg-clip-text ml-4">
-              Sign-in
-            </h1>
-            {/* <p className="text-sm text-gray-400">
-              Please enter your credentials to continue
-            </p> */}
-            <img src={handyBot} alt="Handy Bot" className='h-30 w-auto  absolute right-0 bottom-[-35px] z-40' />
-          </div>
-
-          {/* Form */}
-      <div className='w-[38%] h-[70vh] bg-gray-900/50 rounded backdrop-blur-sm border border-white/10 flex flex-col justify-center'>
-        <div className='max-w-md mx-auto w-full px-4'>
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <div className="space-y-3">
-              <div>
-                <label htmlFor="email" className="block text-lg font-medium text-gray-200 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-2 bg-black/50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="password" className="block text-lg font-medium text-gray-200 mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full px-2 py-2 bg-black/50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  className="h-4 w-4 rounded border-gray-700 bg-black/50 text-blue-500 focus:ring-blue-500"
-                />
-                <label htmlFor="remember" className="ml-2 text-gray-300">
-                  Remember me
-                </label>
-              </div>
-              <a href="#" className="text-blue-300 hover:text-blue-300">
-                Forgot password?
-              </a>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:opacity-90 transition-all duration-300 font-semibold text-sm"
-            >
+          
+  
+          {/* Card */}
+          <div className="bg-white border border-gray-400 rounded-xl shadow-md px-6 py-3 md:px-8 md:py-4">
+            <h1 className="text-md md:text-2xl mb-2 text-start font-medium text-gray-700">
+  
               Sign In
-            </button>
-          </form>
-
-          {/* Footer */}
-          <div className="text-center mt-4 text-sm">
-            <p className="text-gray-400">
-              Don't have an account?{' '}
-              <Link to="/sign-up" className="text-blue-400 hover:text-blue-300 font-medium">
+            </h1>
+            <div className="h-[2px] bg-gray-500 my-4"></div>
+            <form onSubmit={handleSubmit} className="space-y-2">
+              {[
+               
+                {
+                  label: "Email Address",
+                  id: "email",
+                  type: "email",
+                  placeholder: "john@email.com",
+                },
+                {
+                  label: "Password",
+                  id: "password",
+                  type: "password",
+                  placeholder: "••••••••",
+                },
+               
+              ].map(({ label, id, type, placeholder }) => (
+                <div key={id}>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {label}
+                  </label>
+                  <input
+                    type={type}
+                    value={formData[id]}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [id]: e.target.value })
+                    }
+                    placeholder={placeholder}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md
+                               focus:outline-none focus:ring-2 focus:ring-blue-500
+                               focus:border-blue-500 transition"
+                  />
+                </div>
+              ))}
+  
+              {error && (
+                <p className="text-red-600 text-sm text-center">{error}</p>
+              )}
+  
+              <button
+                type="submit"
+                className="w-full mt-4 py-2.5 bg-blue-600 hover:bg-blue-700
+                           text-white font-semibold rounded-md transition"
+              >
+               Sign-in
+              </button>
+            </form>
+  
+            {/* Footer */}
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Don't have an account?{" "}
+              <Link to="/sign-up" className="text-blue-600 hover:underline">
                 Sign up
               </Link>
             </p>
-          </div>
-
-          {/* Social Login */}
-          <div className="relative my-4">
-            <div className=" inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700"></div>
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="px-2 mt-2 bg-gray-900/50 text-gray-400">Or continue with</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <button className="flex items-center justify-center px-3 py-2 border border-gray-700 rounded-lg hover:bg-gray-800/50 transition-colors duration-300">
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-4 w-4 mr-2" />
-              <span className="text-gray-300 text-sm">Google</span>
-            </button>
-            <button className="flex items-center justify-center px-3 py-2 border border-gray-700 rounded-lg hover:bg-gray-800/50 transition-colors duration-300">
-              <BsGithub  className="h-5 w-5 mr-2" />
-              <span className="text-gray-300 text-sm">GitHub</span>
-            </button>
+  
+            {/* Divider */}
+            {/* <div className="flex items-center my-6">
+              <div className="flex-grow border-t border-gray-200" />
+              <span className="px-3 text-xs text-gray-500">OR</span>
+              <div className="flex-grow border-t border-gray-200" />
+            </div> */}
+  
+            {/* Social Login */}
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition">
+                <img
+                  src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  alt="Google"
+                  className="h-4 w-4"
+                />
+                <span className="text-gray-700 text-sm">Google</span>
+              </button>
+  
+              <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition">
+                <BsGithub className="h-5 w-5 text-gray-800" />
+                <span className="text-gray-700 text-sm">GitHub</span>
+              </button>
+            </div> */}
           </div>
         </div>
       </div>
-    </div>
-
-    {error && (
-    <div className="text-red-500 text-sm text-center mb-4">
-      {error}
-    </div>
-  )}
-    </>
   );
 }
 

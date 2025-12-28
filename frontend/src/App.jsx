@@ -39,25 +39,25 @@ const router = createBrowserRouter([
           {
             path: 'learn',
             element: (
-              <ProtectedRoute>
+               <ProtectedRoute>
                 <Learn />
-              </ProtectedRoute>
+               </ProtectedRoute>
             )
           },
           {
             path: 'roadmap',
             element: (
-              <ProtectedRoute>
+               <ProtectedRoute>
                 <Roadmap />
-              </ProtectedRoute>
+               </ProtectedRoute>
             )
           },
           {
             path: 'review',
             element: (
-              <ProtectedRoute>
+               <ProtectedRoute>
                 <Review />
-              </ProtectedRoute>
+               </ProtectedRoute>
             )
           },
           {
@@ -65,33 +65,12 @@ const router = createBrowserRouter([
             element: (
               <ProtectedRoute>
                 <Explain />
-              </ProtectedRoute>
+               </ProtectedRoute>
             )
           },
-          {
-            path: 'debugger',
-            element: (
-              <ProtectedRoute>
-                <Review />
-              </ProtectedRoute>
-            )
-          },
-          {
-            path: 'formatter',
-            element: (
-              <ProtectedRoute>
-                <Review />
-              </ProtectedRoute>
-            )
-          },
-          {
-            path: 'api-tester',
-            element: (
-              <ProtectedRoute>
-                <Review />
-              </ProtectedRoute>
-            )
-          }
+          
+          
+          
         ]
       },
      

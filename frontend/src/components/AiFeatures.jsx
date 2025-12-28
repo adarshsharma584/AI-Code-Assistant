@@ -3,16 +3,16 @@ import AiFeatureCard from "./AiFeatureCard";
 
 function AiFeatures() {
   return (
-    <div className="bg-black h-full w-screen text-white flex flex-col items-center  py-26 my-4">
-      <div className="flex flex-col items-center gap-4 ">
-        <h1 className="text-5xl font-bold text-gray-400 ">
+    <div className="bg-white h-full max-w-screen box text-white flex flex-col items-center  justify-center my-4">
+      <div className="flex flex-col items-center gap-3 ">
+        <h1 className="text-5xl font-bold text-gray-900 ">
           Comprehensive AI Features
         </h1>
-        <p className="text-2xl text-gray-500 ">
+        <p className="text-2xl text-gray-600 ">
           Everything you need for modern development in one intelligent platform
         </p>
 
-        <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  py-8 mt-12 mb-6 px-4 rounded-lg">
+        <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  py-8 mt-8 mx-auto  mb-6 px-4 rounded-lg">
           <AiFeatureCard
             icon={"l"}
             heading={"Smart Code Review"}
