@@ -2,13 +2,13 @@ import React, { useState } from "react";
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/contexts-Files/authContext";
+import toast from 'react-hot-toast';
 
 function SignIn() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { signin } = useAuth();
@@ -23,9 +23,10 @@ function SignIn() {
     setLoading(true);
     try {
       await signin(formData.email, formData.password);
+      toast.success("Signed in successfully!");
       navigate(from, { replace: true });
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message);
       console.log(error);
     } finally {
       setLoading(false);
@@ -85,10 +86,6 @@ function SignIn() {
                   />
                 </div>
               ))}
-
-              {error && (
-                <p className="text-red-600 text-sm text-center">{error}</p>
-              )}
 
               <button
                 type="submit"

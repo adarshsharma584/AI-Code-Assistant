@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/contexts-Files/authContext";
+import toast from 'react-hot-toast';
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -12,7 +13,6 @@ function SignUp() {
     confirmPassword: "",
   });
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +22,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords don't match");
+      toast.error("Passwords don't match");
       return;
     }
 
@@ -34,9 +34,10 @@ function SignUp() {
         formData.email,
         formData.password
       );
+      toast.success("Account created successfully!");
       navigate(from, { replace: true });
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -115,10 +116,6 @@ function SignUp() {
                   />
                 </div>
               ))}
-
-              {error && (
-                <p className="text-red-600 text-sm text-center">{error}</p>
-              )}
 
               <button
                 type="submit"

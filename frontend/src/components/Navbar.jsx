@@ -89,15 +89,15 @@ function Navbar() {
             className="px-4 py-2 rounded-md bg-gray-600 text-white
                        hover:bg-gray-800 transition hover:cursor-pointer"
           >
-            Sign Out
+            Sign Up
           </button>)
           }
           
-          )
+          
         </div>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden text-3xl" onClick={() => setOpen(!open)}>
+        <button className="md:hidden text-3xl text-black font-bold" onClick={() => setOpen(!open)}>
           ☰
         </button>
       </div>

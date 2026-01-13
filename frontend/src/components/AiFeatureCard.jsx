@@ -1,10 +1,10 @@
 import React from "react";
 import { LuCircleCheckBig } from "react-icons/lu";
-function AiFeatureCard({ icon, heading, para, keypoints }) {
+function AiFeatureCard({  heading, para, keypoints }) {
   return (
     <div className="box bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-start my-4 mx-2 py-10 gap-3 border border-gray-200">
       <div className="flex flex-col items-start gap-4">
-        <img src={icon} alt={"/"} className="w-12 h-12 mr-4" />
+        {/* <img src={icon} alt={"/"} className="w-12 h-12 mr-4" /> */}
         <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
           {heading}
         </h2>

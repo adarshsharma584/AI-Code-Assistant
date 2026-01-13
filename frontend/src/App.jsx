@@ -14,6 +14,7 @@ import Roadmap from './pages/Roadmap';
 import Explain from './pages/Explain';
 import Review from './pages/Review';
 import PricingDetails from './pages/PricingDetails';
+import { Toaster } from 'react-hot-toast';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -102,6 +103,7 @@ function App() {
   return (
     <AuthProvider>
       <RouterProvider router={router} />
+      <Toaster position="top-right" />
     </AuthProvider>
   );
 }
