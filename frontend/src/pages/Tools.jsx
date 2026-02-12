@@ -30,13 +30,6 @@ const toolCards = [
     icon: "📝",
     path: "/tools/explain",
   },
-  {
-    title: "Learn",
-    description:
-      "Learn programming concepts step-by-step with practical clarity.",
-    icon: "🎓",
-    path: "/tools/learn",
-  },
  
 ];
 
