@@ -8,109 +8,110 @@ import { InMemoryStore } from "@langchain/langgraph";
 dotenv.config();
 
 const model = new ChatGroq({
-  model: "openai/gpt-oss-20b",
-  temperature: 0.2,
+  model: "llama-3.3-70b-versatile", // Using a standard, fast and reliable Groq model
+  temperature: 0.1, // Lower temperature for more consistent JSON
+  maxTokens: 4096,
 });
 
 const checkpointer = new MemorySaver();
 const store = new InMemoryStore();
 
 export const SYSTEM_PROMPTS = {
-  learn: `You are an expert technical writer. Generate comprehensive learning materials in README-style markdown format.
+  learn: `You are an expert technical educator, documentation analyst, and senior software engineer.
 
-CRITICAL FORMATTING RULES - FOLLOW EXACTLY:
-1. ALWAYS use # for main title (single #)
-2. ALWAYS use ## for major sections (double ##)
-3. ALWAYS use ### for subsections (triple ###)
-4. ALWAYS include TWO blank lines between major sections
-5. ALWAYS include ONE blank line between subsections
-6. ALWAYS use proper code blocks: \`\`\`language on its own line, code, then \`\`\` on its own line
-7. ALWAYS use double line breaks (blank line) between paragraphs
-8. ALWAYS format paragraphs as full sentences, not bullet points for theory
-9. ALWAYS include proper spacing around headings
+Your task is to:
 
-EXACT OUTPUT STRUCTURE - FOLLOW THIS FORMAT:
+1. Search and study the official documentation of the given skill or topic.
+2. Extract accurate, up-to-date technical information (2026 standards).
+3. Deeply understand the underlying theory and mechanics.
+4. Rewrite everything in simple, beginner-friendly language.
+5. Include working code examples wherever applicable.
+6. Create a logically structured learning flow from basics to advanced.
 
-# [Topic Name]
+CRITICAL RULES:
 
-[Introduction paragraph - 2-3 sentences explaining what this topic is about. Use full sentences with proper grammar and punctuation.]
+- You must prioritize OFFICIAL DOCUMENTATION (official website, official docs, RFCs, GitHub org docs).
+- If official docs are unclear, supplement with trusted sources.
+- Do not hallucinate APIs or syntax.
+- All code examples must be correct and modern (latest stable version).
+- Explain WHY things work, not just WHAT they do.
+- Keep language simple but technically accurate.
+- Provide a full conceptual flow so learner does not feel lost.
 
-## Theory
+Output must be VALID JSON only.
+No markdown.
+No commentary.
+No extra explanation outside JSON.
 
-[Start with a paragraph explaining the theoretical foundation. This should be 2-4 sentences describing the core concepts in paragraph form.]
+-----------------------------------------
 
-### Core Concepts
+OUTPUT FORMAT:
 
-[Paragraph form: Explain the key concepts in 2-3 sentences. Then you can use bullet points for quick reference.]
+{
+  "title": "string",
+  "overview": "High-level explanation in simple language",
+  "learning_flow": [
+    {
+      "stage": "Foundation | Intermediate | Advanced",
+      "topics": [
+        {
+          "topic_title": "string",
+          "simple_explanation": "Explain in very simple language",
+          "deep_dive_explanation": "Detailed documentation-level explanation in easy language",
+          "why_it_exists": "Explain the need and problem it solves",
+          "how_it_works_internally": "Explain mechanism clearly",
+          "code_examples": [
+            {
+              "title": "string",
+              "language": "string",
+              "code": "string",
+              "explanation": "Explain what this code does line by line in simple language"
+            }
+          ],
+          "real_world_use_cases": [
+            {
+              "scenario": "string",
+              "explanation": "string"
+            }
+          ],
+          "common_mistakes": [
+            "string"
+          ],
+          "best_practices": [
+            "string"
+          ]
+        }
+      ]
+    }
+  ],
+  "architecture_insight": "If applicable, explain how this fits into larger systems.",
+  "mental_model": "Explain a simple mental model or analogy to understand this topic.",
+  "references": [
+    {
+      "source_name": "string",
+      "source_type": "Official Docs | RFC | GitHub | Article",
+      "link": "string"
+    }
+  ]
+}
 
-- **Concept 1**: Brief explanation
-- **Concept 2**: Brief explanation
-- **Concept 3**: Brief explanation
+-----------------------------------------
 
-### Detailed Explanation
+QUALITY REQUIREMENTS:
 
-[Write in paragraph form - 3-5 sentences explaining the concepts in detail. Use proper grammar, complete sentences, and clear explanations. This should be educational content, not just a list.]
+- Each topic must feel like a mini-lesson.
+- Code examples must be practical and realistic.
+- Avoid vague generic descriptions.
+- Avoid overly academic tone.
+- Explain complex terms when first introduced.
+- Keep learning progression logical and layered.
+- Cover both theory and practical usage.
 
-[Continue with another paragraph if needed, with proper spacing between paragraphs.]
+-----------------------------------------
 
-## Code
+GOAL:
 
-\`\`\`[language]
-[Your code example here - well-formatted, properly indented]
-\`\`\`
-
-## Code Explanation
-
-[Start with a paragraph explaining what the code does overall - 2-3 sentences.]
-
-[Then use numbered list or paragraphs to explain step-by-step:]
-
-1. **Step 1**: [Explanation in paragraph form - 2-3 sentences]
-2. **Step 2**: [Explanation in paragraph form - 2-3 sentences]
-3. **Step 3**: [Explanation in paragraph form - 2-3 sentences]
-
-[Or use paragraphs:]
-
-The first part of the code [explanation in 2-3 sentences].
-
-The second part handles [explanation in 2-3 sentences].
-
-## Examples / Exercises
-
-### Example 1: [Example Name]
-
-[Paragraph explaining the example - 2-3 sentences.]
-
-\`\`\`[language]
-[Example code]
-\`\`\`
-
-[Explanation of the example in paragraph form.]
-
-### Exercise
-
-[Paragraph describing the exercise - 2-3 sentences.]
-
-- Task 1: [Description]
-- Task 2: [Description]
-
-## Summary / Key Takeaways
-
-[Paragraph summarizing the main points - 3-4 sentences.]
-
-**Key Points:**
-- Point 1
-- Point 2
-- Point 3
-
-IMPORTANT: 
-- Use proper markdown syntax throughout
-- Ensure all headings have blank lines before and after
-- Code blocks must be properly formatted with language tags
-- Theory must be in paragraph form, not just bullets
-- Maintain consistent spacing throughout
-- Use **bold** for emphasis on important terms
-- Use \`inline code\` for technical terms`,
+Generate deep documentation-based notes rewritten in simple language with complete learning flow and working code examples.`,
 
   review: `You are an expert code reviewer. Perform thorough code reviews and present findings in README-style markdown format.
 
@@ -214,6 +215,43 @@ CONTENT STRUCTURE:
 9. ## Next Steps
 
 Ensure well-structured, actionable roadmaps with a clear visual diagram that's easy to follow and track progress.`,
+
+  roadmap_json: `You are an expert curriculum designer and technical roadmap architect. Your task is to generate a deeply structured, visually organized learning roadmap for any given skill.
+
+STRICT JSON FORMAT:
+Return ONLY a JSON object with the following structure:
+{
+  "title": "Skill Name Roadmap",
+  "description": "Short 2-3 sentence summary",
+  "nodes": [
+    {
+      "id": "unique-id",
+      "label": "Node Title",
+      "type": "root | prerequisite | phase | topic | subtopic",
+      "parent": "parent-node-id or null",
+      "order": number,
+      "data": { 
+        "description": "Short explanation of this node",
+        "topic": "Comma separated keywords or technologies" 
+      }
+    }
+  ]
+}
+
+RULES:
+1. The root node must have type "root".
+2. All phases must connect to root (parent: "root-id").
+3. Topics must connect to phases.
+4. Subtopics must connect to topics.
+5. IDs must be unique and URL-safe (use kebab-case).
+6. Order field determines display order inside same parent.
+7. Generate between 5–10 phases depending on skill complexity.
+8. Each phase must contain 3–6 topics.
+9. Each topic can have 0–5 subtopics.
+10. Include advanced & senior-level topics for technical skills.
+11. Do not skip fundamentals. Ensure logical learning progression.
+12. Make roadmap industry-relevant and up-to-date (2026 standards).
+13. Return ONLY valid JSON. No explanations or markdown.`,
 };
 
 export const QUIZ_SYSTEM_PROMPT = `You are an expert academic examiner.
@@ -245,21 +283,75 @@ SYLLABUS RULES:
 // Agent setup can be added here if needed for tool orchestration.
 
 export async function invokeText(systemPrompt, userInstruction) {
-  const res = await model.invoke([
-    new SystemMessage(systemPrompt),
-    new HumanMessage(userInstruction),
-  ]);
-  return res.content;
+  try {
+    const res = await model.invoke([
+      new SystemMessage(systemPrompt),
+      new HumanMessage(userInstruction),
+    ]);
+
+    // Calculate usage
+    const usage = {
+      input_tokens: res.usage_metadata?.input_tokens || 0,
+      output_tokens: res.usage_metadata?.output_tokens || 0,
+      total_tokens: res.usage_metadata?.total_tokens || 0
+    };
+
+    return { content: res.content, usage };
+  } catch (err) {
+    console.error("Error in invokeText:", err.message);
+    return { content: "I'm sorry, I encountered an error processing your request.", usage: { total_tokens: 0 } };
+  }
 }
 
-export async function invokeJSON(systemPrompt, userInstruction) {
-  const res = await model.invoke([
-    new SystemMessage(systemPrompt),
-    new HumanMessage(userInstruction),
-  ], {
-    response_format: { type: "json_object" },
-  });
-  return JSON.parse(res.content);
+export async function invokeJSON(systemPrompt, userInstruction, retries = 2) {
+  let lastError;
+
+  for (let i = 0; i <= retries; i++) {
+    try {
+      if (i > 0) {
+        console.log(`Retry ${i}/${retries} for JSON generation...`);
+      }
+
+      const res = await model.invoke([
+        new SystemMessage(systemPrompt),
+        new HumanMessage(userInstruction),
+      ], {
+        response_format: { type: "json_object" },
+      });
+
+      // Calculate usage
+      const usage = {
+        input_tokens: res.usage_metadata?.input_tokens || 0,
+        output_tokens: res.usage_metadata?.output_tokens || 0,
+        total_tokens: res.usage_metadata?.total_tokens || 0
+      };
+
+      let content = res.content.trim();
+
+      // Handle cases where the model might still wrap JSON in markdown blocks
+      if (content.startsWith("```json")) {
+        content = content.replace(/^```json/, "").replace(/```$/, "").trim();
+      } else if (content.startsWith("```")) {
+        content = content.replace(/^```/, "").replace(/```$/, "").trim();
+      }
+
+      try {
+        const parsedContent = JSON.parse(content);
+        return { content: parsedContent, usage };
+      } catch (parseError) {
+        console.error("Failed to parse JSON content:", content);
+        throw new Error(`JSON parsing failed: ${parseError.message}`);
+      }
+    } catch (err) {
+      lastError = err;
+      console.error(`Attempt ${i + 1} failed:`, err.message);
+      // If it's the last attempt, throw the error
+      if (i === retries) throw err;
+      // Brief delay before retry
+      await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+    }
+  }
+  throw lastError;
 }
 
 export async function generateQuestions(subject, studentClass, board) {

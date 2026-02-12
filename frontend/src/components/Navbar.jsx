@@ -44,6 +44,11 @@ function Navbar() {
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-8">
           <li>
+            <NavLink to="/dashboard" className={navLinkStyle}>
+              Dashboard
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/about" className={navLinkStyle}>
               About Us
             </NavLink>
@@ -77,23 +82,23 @@ function Navbar() {
 
           {token ?
             (<button
-            onClick={handleSignOut}
-            className="px-4 py-2 rounded-md bg-gray-600 text-white
+              onClick={handleSignOut}
+              className="px-4 py-2 rounded-md bg-gray-600 text-white
                        hover:bg-gray-800 transition hover:cursor-pointer"
-          >
-            Sign Out
+            >
+              Sign Out
             </button>)
             :
             (<button
               onClick={() => { navigate("/sign-up") }}
-            className="px-4 py-2 rounded-md bg-gray-600 text-white
+              className="px-4 py-2 rounded-md bg-gray-600 text-white
                        hover:bg-gray-800 transition hover:cursor-pointer"
-          >
-            Sign Up
-          </button>)
+            >
+              Sign Up
+            </button>)
           }
-          
-          
+
+
         </div>
 
         {/* Mobile Menu Button */}
@@ -106,6 +111,9 @@ function Navbar() {
       {open && (
         <div className="md:hidden bg-white text-gray-700  text-bold border-t ">
           <ul className="flex flex-col items-center gap-4 py-6">
+            <NavLink to="/dashboard" onClick={() => setOpen(false)}>
+              Dashboard
+            </NavLink>
             <NavLink to="/about" onClick={() => setOpen(false)}>
               About Us
             </NavLink>
@@ -122,7 +130,7 @@ function Navbar() {
             <button className="px-6 py-2 bg-gray-700 text-white rounded-md">
               <NavLink
                 to="/sign-in"
-               
+
               >Sign - in</NavLink>
             </button>
             <button

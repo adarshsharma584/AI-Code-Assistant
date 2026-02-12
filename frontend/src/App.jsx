@@ -7,13 +7,14 @@ import Tools from './pages/Tools';
 import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
 import SignIn from "./pages/SignIn"
-import {AuthProvider}  from './context/Providers/AuthProvider';
+import { AuthProvider } from './context/Providers/AuthProvider';
 import ProtectedRoute from './components/ProtectedRoute';
 import Learn from './pages/Learn';
 import Roadmap from './pages/Roadmap';
 import Explain from './pages/Explain';
 import Review from './pages/Review';
 import PricingDetails from './pages/PricingDetails';
+import Dashboard from './pages/Dashboard';
 import { Toaster } from 'react-hot-toast';
 const router = createBrowserRouter([
   {
@@ -82,6 +83,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
           </ProtectedRoute>
         ),
       },

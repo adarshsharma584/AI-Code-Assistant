@@ -70,9 +70,8 @@ function Pricing() {
           {/* Billing Toggle */}
           <div className="mt-8 flex items-center justify-center gap-4">
             <span
-              className={`text-sm font-medium ${
-                billingCycle === "monthly" ? "text-blue-600" : "text-gray-600"
-              }`}
+              className={`text-sm font-medium ${billingCycle === "monthly" ? "text-blue-600" : "text-gray-600"
+                }`}
             >
               Monthly
             </span>
@@ -86,16 +85,14 @@ function Pricing() {
               className="relative w-12 h-6 rounded-full bg-gray-500"
             >
               <span
-                className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                  billingCycle === "yearly" ? "translate-x-6" : "translate-x-0"
-                }`}
+                className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${billingCycle === "yearly" ? "translate-x-6" : "translate-x-0"
+                  }`}
               />
             </button>
 
             <span
-              className={`text-sm font-medium ${
-                billingCycle === "yearly" ? "text-blue-600" : "text-gray-400"
-              }`}
+              className={`text-sm font-medium ${billingCycle === "yearly" ? "text-blue-600" : "text-gray-400"
+                }`}
             >
               Yearly <span className="text-green-600">(Save 30%)</span>
             </span>
@@ -109,9 +106,8 @@ function Pricing() {
               key={plan.name}
               className={`group relative p-8 rounded-xl border bg-white flex flex-col
     transition-all duration-300 ease-out
-    hover:-translate-y-2 hover:shadow-lg hover:cursor-pointer ${
-      plan.popular ? "border-blue-600 shadow-md scale-105" : "border-gray-400"
-    }`}
+    hover:-translate-y-2 hover:shadow-lg hover:cursor-pointer ${plan.popular ? "border-blue-600 shadow-md scale-105" : "border-gray-400"
+                }`}
             >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs px-4 py-1 rounded-full flex items-center gap-1 ">
@@ -129,11 +125,10 @@ function Pricing() {
 
               <Link
                 to="/sign-up"
-                className={`mb-8 px-6 py-3 rounded-lg text-center font-semibold transition ${
-                  plan.popular
+                className={`mb-8 px-6 py-3 rounded-lg text-center font-semibold transition ${plan.popular
                     ? "bg-blue-600 text-white hover:bg-blue-700"
                     : "border border-gray-300 hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 {plan.buttonText}
               </Link>

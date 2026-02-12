@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema(
       codesReviewed: { type: Number, default: 0 },
       lastActive: { type: Date, default: Date.now },
     },
+    dailyTokenUsage: { type: Number, default: 0 },
+    lastTokenReset: { type: Date, default: Date.now },
+    plan: { type: String, enum: ["free", "pro", "enterprise"], default: "free" },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }

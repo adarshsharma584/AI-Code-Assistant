@@ -1,14 +1,23 @@
 import { ChatSession } from "../models/chatSession.model.js";
 import { Message } from "../models/message.model.js";
-import { invokeText, SYSTEM_PROMPTS } from "../services/groq.service.js";
+import { invokeText, invokeJSON, SYSTEM_PROMPTS } from "../services/groq.service.js";
 import { debugCode, formatCode, testAPI } from "../services/prompt.service.js";
 
 export async function createChatSession(req, res) {
   try {
     const userId = req.user.id;
-    const { title } = req.body;
+    const { title, firstMessage } = req.body;
     const page = req.query.page || "learn";
-    const chatSession = await ChatSession.create({ user: userId, title, page, messages: [] });
+
+    // Use provided title, or first message (truncated), or default
+    let sessionTitle = title;
+    if (!sessionTitle && firstMessage) {
+      sessionTitle = firstMessage.length > 50 ? firstMessage.substring(0, 50) + "..." : firstMessage;
+    } else if (!sessionTitle) {
+      sessionTitle = "New Chat";
+    }
+
+    const chatSession = await ChatSession.create({ user: userId, title: sessionTitle, page, messages: [] });
     return res.status(201).json({ success: true, chatSession });
   } catch (e) {
     return res.status(500).json({ success: false, message: "error" });
@@ -72,7 +81,8 @@ export async function sendMessage(req, res) {
 
     switch (page) {
       case "learn":
-        aiText = await invokeText(SYSTEM_PROMPTS.learn, content);
+        const learnJson = await invokeJSON(SYSTEM_PROMPTS.learn, content);
+        aiText = JSON.stringify(learnJson);
         break;
       case "review":
         aiText = await invokeText(SYSTEM_PROMPTS.review, content);
@@ -111,7 +121,27 @@ export async function sendMessage(req, res) {
         aiText = await invokeText("You are a helpful assistant.", content);
     }
 
-    const aiMessage = await Message.create({ chatSession: sessionId, role: "ai", content: aiText });
+    // Extract content and usage from result
+    const aiContent = typeof aiText === 'object' && aiText.usage ? aiText.content : aiText;
+    const usage = typeof aiText === 'object' && aiText.usage ? aiText.usage : { total_tokens: 0 };
+
+    // Update user token usage
+    // We update asynchronously to not block the response
+    if (usage.total_tokens > 0) {
+      try {
+        const User = (await import("../models/user.model.js")).User;
+        await User.findByIdAndUpdate(req.user.id, {
+          $inc: { dailyTokenUsage: usage.total_tokens }
+        });
+      } catch (err) {
+        console.error("Failed to update token usage:", err);
+      }
+    }
+
+    // Ensure aiContent is a string for storage if it's an object (JSON response)
+    const storedContent = typeof aiContent === 'object' ? JSON.stringify(aiContent) : aiContent;
+
+    const aiMessage = await Message.create({ chatSession: sessionId, role: "ai", content: storedContent });
     session.messages.push(aiMessage._id);
     await session.save();
 

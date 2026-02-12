@@ -1,112 +1,18 @@
-import { invokeText, SYSTEM_PROMPTS } from "./groq.service.js";
+import { invokeText, invokeJSON, SYSTEM_PROMPTS } from "./groq.service.js";
 
 /**
  * Generate learning material based on topic and level
  */
 export async function generateLearningMaterial({ title, topic, level }) {
-    const userInstruction = `Generate comprehensive learning material in README-style markdown format.
-
+    const userInstruction = `Generate detailed documentation-based notes for:
+    
 Topic: ${topic}
 Title: ${title || topic || "Learning Notes"}
 Level: ${level || "beginner"}
 
-CRITICAL: Follow the EXACT structure below. Output must be properly formatted markdown.
+Remember to follow the JSON schema strictly, focusing on the learning_flow with stages (Foundation, Intermediate, Advanced) and detailed topics. Provide comprehensive, simple yet deep content.`;
 
-REQUIRED STRUCTURE - COPY THIS FORMAT EXACTLY:
-
-# [Title Here]
-
-[Introduction paragraph: 2-3 sentences explaining what ${topic} is and why it's important. Write in paragraph form with complete sentences.]
-
-## Theory
-
-[Opening paragraph: 2-3 sentences introducing the theoretical foundation of ${topic}. Use proper grammar and full sentences.]
-
-### Core Concepts
-
-[Paragraph: 2-3 sentences explaining the key concepts. Then list them as bullets:]
-
-- **Concept Name 1**: Brief explanation in sentence form
-- **Concept Name 2**: Brief explanation in sentence form
-- **Concept Name 3**: Brief explanation in sentence form
-
-### Detailed Explanation
-
-[Write 2-3 paragraphs here, each 3-5 sentences long. Explain the concepts in detail using proper paragraph form. Use complete sentences, proper grammar, and clear explanations. Include blank lines between paragraphs.]
-
-[Second paragraph continues the explanation...]
-
-[Third paragraph if needed...]
-
-## Code
-
-\`\`\`[appropriate language]
-[Provide a complete, working code example related to ${topic}. Code should be well-formatted, properly indented, and demonstrate the concepts discussed in the theory section.]
-\`\`\`
-
-## Code Explanation
-
-[Opening paragraph: 2-3 sentences explaining what the code does overall.]
-
-[Then explain step-by-step using ONE of these formats:]
-
-**Option 1 - Numbered List:**
-1. **Step 1 Name**: [2-3 sentence explanation in paragraph form]
-2. **Step 2 Name**: [2-3 sentence explanation in paragraph form]
-3. **Step 3 Name**: [2-3 sentence explanation in paragraph form]
-
-**Option 2 - Paragraphs:**
-[First paragraph: 3-4 sentences explaining the first part of the code]
-
-[Second paragraph: 3-4 sentences explaining the second part of the code]
-
-[Continue as needed...]
-
-## Examples / Exercises
-
-### Example 1: [Example Name]
-
-[Paragraph: 2-3 sentences describing the example]
-
-\`\`\`[language]
-[Example code]
-\`\`\`
-
-[Paragraph: 2-3 sentences explaining what the example demonstrates]
-
-### Exercise
-
-[Paragraph: 2-3 sentences describing the exercise]
-
-- **Task 1**: [Description in sentence form]
-- **Task 2**: [Description in sentence form]
-- **Task 3**: [Description in sentence form]
-
-## Summary / Key Takeaways
-
-[Paragraph: 3-4 sentences summarizing the main points learned about ${topic}]
-
-**Key Points:**
-- [Main takeaway 1]
-- [Main takeaway 2]
-- [Main takeaway 3]
-
-FORMATTING CHECKLIST:
-✓ Use # for main title (single hash)
-✓ Use ## for major sections (double hash)
-✓ Use ### for subsections (triple hash)
-✓ Include TWO blank lines between major sections
-✓ Include ONE blank line between subsections
-✓ Use proper code blocks with language tags
-✓ Write theory in paragraph form, not bullets
-✓ Use double line breaks between paragraphs
-✓ Use **bold** for important terms
-✓ Use \`inline code\` for technical terms
-✓ Ensure all sections are properly spaced
-
-Generate the content following this EXACT structure and formatting.`;
-
-    return await invokeText(SYSTEM_PROMPTS.learn, userInstruction);
+    return await invokeJSON(SYSTEM_PROMPTS.learn, userInstruction);
 }
 
 /**
@@ -260,6 +166,18 @@ ASCII DIAGRAM REQUIREMENTS:
 Create a well-structured, actionable roadmap with a clear visual ASCII diagram that's easy to follow and track progress.`;
 
     return await invokeText(SYSTEM_PROMPTS.roadmap, userInstruction);
+}
+
+/**
+ * Generate structured learning roadmap in JSON
+ */
+export async function generateRoadmapJSON({ goal, currentSkills, timeframe }) {
+    const userInstruction = `Generate a complete structured learning roadmap for: ${goal}
+
+Skill Level: Beginner to Advanced
+Goal: Job-ready professional level`;
+
+    return await invokeJSON(SYSTEM_PROMPTS.roadmap_json, userInstruction);
 }
 
 /**

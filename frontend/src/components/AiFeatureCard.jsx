@@ -1,6 +1,6 @@
 import React from "react";
 import { LuCircleCheckBig } from "react-icons/lu";
-function AiFeatureCard({  heading, para, keypoints }) {
+function AiFeatureCard({ heading, para, keypoints }) {
   return (
     <div className="box bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-start my-4 mx-2 py-10 gap-3 border border-gray-200">
       <div className="flex flex-col items-start gap-4">

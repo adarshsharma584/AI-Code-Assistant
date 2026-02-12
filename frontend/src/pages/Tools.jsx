@@ -3,6 +3,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const toolCards = [
   {
+    title: "Roadmap",
+    description:
+      "Follow a clear, goal-oriented roadmap tailored to your learning path.",
+    icon: "🗺️",
+    path: "/tools/roadmap",
+  },
+  {
+    title: "Learn",
+    description:
+      "Create detailed notes with clear explanation & in beginner friendly tone.",
+    icon: "🎓",
+    path: "/tools/learn",
+  },
+  {
     title: "Code Review",
     description:
       "Get structured reviews with best practices, performance tips, and clean architecture suggestions.",
@@ -23,13 +37,7 @@ const toolCards = [
     icon: "🎓",
     path: "/tools/learn",
   },
-  {
-    title: "Roadmap",
-    description:
-      "Follow a clear, goal-oriented roadmap tailored to your learning path.",
-    icon: "🗺️",
-    path: "/tools/roadmap",
-  },
+ 
 ];
 
 function Tools() {

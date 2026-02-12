@@ -14,7 +14,7 @@ function AiFeatures() {
 
         <div className="card-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12  py-8 mt-8 mx-auto  mb-6 px-4 rounded-lg">
           <AiFeatureCard
-           
+
             heading={"Smart Code Review"}
             para={
               "Get instant, intelligent feedback on your code with security analysis, performance optimization, and best practice recommendations."
@@ -26,7 +26,7 @@ function AiFeatures() {
             ]}
           />
           <AiFeatureCard
-            
+
             heading={"Smart Chat History"}
             para={
               "Never lose context with intelligent conversation tracking, search, and organization across all your AI interactions."
@@ -38,7 +38,7 @@ function AiFeatures() {
             ]}
           />
           <AiFeatureCard
-            
+
             heading={"AI Quiz Generator"}
             para={
               "Create personalized coding challenges and assessments that adapt to your skill level and learning objectives."

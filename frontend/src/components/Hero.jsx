@@ -5,7 +5,7 @@ function Hero() {
   const navigate = useNavigate();
 
   return (
-    <section className=" box h-[calc(100vh-12rem)]  overflow-hidden relative z-10 p-4  min-h-screen flex items-start justify-center px-4 py-1 mx-auto">
+    <section className="box h-[calc(100vh-12rem)] overflow-hidden relative z-10 p-4 pt-24 min-h-screen flex items-start justify-center px-4 py-1 mx-auto">
       <div className="w-full max-w-5xl text-center bg-white rounded-2xl   md:p-4">
         {/* Small Tag */}
         <p className="inline-block text-center mb-3 text-sm font-medium text-gray-500 tracking-wide">
